@@ -1,0 +1,78 @@
+:host {
+  ion-content {
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 20px;
+    --padding-bottom: 20px;
+    background: #f7f8fa;
+  }
+
+  h2 {
+    text-align: center;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  ion-input,
+  ion-select,
+  ion-datetime {
+    margin-bottom: 16px;
+  }
+}
+
+.calendar-container {
+  margin-top: 20px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.day-name {
+  font-weight: bold;
+  text-align: center;
+}
+
+.calendar-day {
+  background-color: #e0e0e0;
+  text-align: center;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-day.ocupado {
+  background-color: #ff6b6b; // vermelho
+  color: white;
+}
+
+.calendar-day.livre {
+  background-color: #51cf66; // verde
+  color: white;
+}
+
+.icon-arrow{
+    color: #fff;
+}
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+

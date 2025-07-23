@@ -1,0 +1,94 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Agendamento</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <!-- Segmento de menu -->
+  <ion-segment [(ngModel)]="menuSelecionado">
+    <ion-segment-button value="formulario">
+      <ion-label>Agendar</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="calendario" (click)="carregarAgendamentosDoMes()">
+      <ion-label>Calendário</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Formulário -->
+  <div *ngIf="menuSelecionado === 'formulario'">
+    <h2>Agendamento</h2>
+    <form (ngSubmit)="onSubmit()" #agendamentoForm="ngForm">
+      <ion-datetime id="datetime" presentation="date-time" [value]="agendamento.dataHora || undefined"
+        (ionChange)="onDateTimeChange($event)"></ion-datetime>
+
+      <ion-input label="Nome do Evento" label-placement="floating" fill="outline" type="text"
+        [(ngModel)]="agendamento.nomeEvento" name="nomeEvento" required></ion-input>
+
+      <ion-select label="Ministério" label-placement="floating" fill="outline" [(ngModel)]="agendamento.ministerio"
+        name="ministerio" placeholder="Selecione" required>
+        <ion-select-option *ngFor="let ministerio of ministerios" [value]="ministerio.nome">
+          {{ ministerio.nome }}
+        </ion-select-option>
+      </ion-select>
+
+      <ion-input label="Nome do Pregador" label-placement="floating" fill="outline" type="text"
+        [(ngModel)]="agendamento.nomePregador" name="nomePregador" required></ion-input>
+
+      <ion-input label="Quem Agendou" label-placement="floating" fill="outline" type="text"
+        [(ngModel)]="agendamento.quemAgendou" name="quemAgendou" required></ion-input>
+
+      <ion-button expand="block" type="submit" [disabled]="!agendamentoForm.form.valid">
+        Salvar Agendamento
+      </ion-button>
+    </form>
+  </div>
+
+  <!-- Calendário -->
+  <div *ngIf="menuSelecionado === 'calendario'" class="calendar-container">
+    <div class="calendar-header">
+      <ion-button fill="clear" (click)="mesAnterior()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+
+      <h3>{{ meses[mesAtual] }} {{ anoAtual }}</h3>
+
+      <ion-button fill="clear" (click)="proximoMes()">
+        <ion-icon name="chevron-forward-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="calendar-grid">
+      <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
+      <div class="calendar-day" *ngFor="let dia of diasNoCalendario" [ngClass]="{
+          ocupado: diasComAgendamento.includes(dia.data),
+          livre: !diasComAgendamento.includes(dia.data)
+        }" (click)="selecionarDia(dia.data)">
+        {{ dia.numero }}
+      </div>
+    </div>
+
+    <div *ngIf="agendamentosDoDia.length">
+      <h4>Agendamentos de {{ formatarDiaSemana(diaSelecionado) }}:</h4>
+      <ion-list>
+        <ion-item *ngFor="let evento of agendamentosDoDia">
+          <ion-label>
+            <h3>Evento: {{ evento.nomeEvento }}</h3>
+            <p>Ministério: {{ evento.ministerio }}</p>
+            <p>Pregador: {{ evento.nomePregador }}</p>
+
+            <p>Hora: {{ formatarHora(evento.dataHora) }}</p>
+          </ion-label>
+
+          <ion-button color="primary" slot="end" (click)="editarEvento(evento)">Editar</ion-button>
+          <ion-button color="danger" slot="end" (click)="excluirEvento(evento.id)">Excluir</ion-button>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+</ion-content>

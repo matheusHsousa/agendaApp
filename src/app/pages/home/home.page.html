@@ -1,0 +1,72 @@
+<ion-content [fullscreen]="true">
+  <div class="imagem-parallax">
+    <img src="../../assets/images/igreja.png" />
+    <ion-icon name="person-circle" class="icon-admin" *ngIf="isAdmin" (click)="goToAdmin()"
+      style="cursor: pointer;"></ion-icon>
+  </div>
+
+  <ion-card style="margin: 0px; border-radius: 0px;">
+      <div class="carrossel-container" *ngIf="proximosEventos.length > 0">
+    
+    <label style="margin-left: 10px; color: #4d8dff;">Próximos Eventos</label>
+
+    <div class="carrossel-wrapper">
+      <div class="evento-card" *ngFor="let evento of proximosEventos">
+        <ion-card style="display: flex; flex-direction: column; padding: 10px; margin: 5px 0px 0px 10px; "> 
+            <label><strong>{{ evento.nomeEvento }}</strong></label>
+            <label>{{ evento.nomePregador }}</label>
+            <label style="display: flex; align-items: center; gap: 5px;"><ion-icon slot="start" name="calendar"></ion-icon> {{ formatarDia(evento.dataHora) }} |
+             {{ formatarHora(evento.dataHora) }}</label>
+        </ion-card>
+      </div>
+    </div>
+  </div>
+  </ion-card>
+
+
+  <div>
+    <ion-card (click)="abrirPix()">
+      <ion-card-header>
+        <ion-card-title>
+          <div class="titulo-com-icone">
+            <ion-icon name="card"></ion-icon>
+            <span>Dizimar e ofertar</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="warning" (click)="goToSabbathSchool()">
+      <ion-card-header>
+        <ion-card-title>
+          <div class="titulo-com-icone">
+            <ion-icon name="book"></ion-icon>
+            <span>Escola Sabatina</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card color="primary" (click)="goToUserSchedule()">
+      <ion-card-header>
+        <ion-card-title>
+          <div class="titulo-com-icone">
+            <ion-icon name="calendar"></ion-icon>
+            <span >Agenda Cidade Dutra</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          <div class="titulo-com-icone">
+            <ion-icon name="logo-instagram"></ion-icon>
+            <span>Midias Sociais</span>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+    </ion-card>
+  </div>
+</ion-content>

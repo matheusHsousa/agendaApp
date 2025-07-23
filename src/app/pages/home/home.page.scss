@@ -1,0 +1,88 @@
+ion-card {
+  margin-bottom: 16px;
+  /* espaço entre os cards */
+  border-radius: 12px;
+  /* bordas arredondadas */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+ion-card[color="warning"] {
+  --background: #f4b400;
+  /* amarelo parecido com o da imagem */
+  color: #fff;
+
+}
+
+ion-card[color="primary"] {
+  --background: #4285f4;
+  /* azul parecido com o da imagem */
+  color: #fff;
+}
+
+.imagem-parallax {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.imagem-parallax img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  object-fit: cover;
+  transform: translateY(0);
+  transition: transform 0.1s ease-out;
+  will-change: transform;
+}
+
+/* Novo estilo para o ícone admin */
+.icon-admin {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 40px;
+  color: rgb(230, 230, 230);
+  text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+.carrossel-container {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+  margin: 20px 0px 5px 0px;
+}
+
+.carrossel-wrapper {
+  display: flex;
+  gap: 12px; /* espaço menor entre os cards */
+  padding-bottom: 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* scroll suave no iOS */
+}
+
+.evento-card {
+  min-width: 220px; /* diminui a largura dos cards */
+  flex: 0 0 auto; /* mantém tamanho fixo para scroll horizontal */
+}
+
+
+.carrossel-slide {
+  min-width: 100%;
+  box-sizing: border-box;
+}
+
+.carrossel-controles {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.titulo-com-icone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
