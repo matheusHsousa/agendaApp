@@ -1,2 +1,8 @@
 // For information on how to create your own theme, please see:
 // http://ionicframework.com/docs/theming/
+
+ion-app, ion-content {
+  padding-top: env(safe-area-inset-top);
+  /* fallback para navegadores antigos */
+  padding-top: constant(safe-area-inset-top);
+}

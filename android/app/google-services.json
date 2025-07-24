@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "13685315862",
+    "project_id": "agendacidadedutra",
+    "storage_bucket": "agendacidadedutra.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13685315862:android:0cd0b24e38d20290491837",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13685315862-qpqk32jbh4f570i6oq44ol0ojnb1b241.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.ionic.starter",
+            "certificate_hash": "d284c6f43459cf7be106647998a4d697159871ad"
+          }
+        },
+        {
+          "client_id": "13685315862-fet1m22552gpm73ljknnui25op7ckf5d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMsQ9mcKLnSqqgxuDn62kS91DVJhysvyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13685315862-fet1m22552gpm73ljknnui25op7ckf5d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

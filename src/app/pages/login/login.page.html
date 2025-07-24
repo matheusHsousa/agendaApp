@@ -1,25 +1,12 @@
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Login</ion-card-title>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="floating">Email</ion-label>
-        <ion-input [(ngModel)]="email" type="email" required></ion-input>
-      </ion-item>
+<ion-content class="login-page">
+  <div class="login-container">
+    <img src="./../../../assets/images/4d9063a0-672f-4339-b31d-f1c02312e232.png" alt="Logo" class="logo" />
 
-      <ion-item>
-        <ion-label position="floating">Senha</ion-label>
-        <ion-input [(ngModel)]="password" type="password" required></ion-input>
-      </ion-item>
+    <h2>Bem-vindo</h2>
 
-      <ion-button expand="full" (click)="login()">Entrar</ion-button>
-
-      <ion-button expand="full" color="tertiary" style="margin-top: 15px;" (click)="loginWithGoogle()">
-        Entrar com Google
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
+    <ion-button expand="block" class="google-login" (click)="loginWithGoogle()">
+      <ion-icon slot="start" name="logo-google"></ion-icon>
+      Entrar com Google
+    </ion-button>
+  </div>
 </ion-content>
-  

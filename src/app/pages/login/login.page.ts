@@ -1,21 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import {
-  IonContent,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonItem,
-  IonLabel,
-  IonInput,
-  IonButton
-} from '@ionic/angular/standalone';
 import { Auth } from '@angular/fire/auth';
 import { inject } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 
 @Component({
@@ -26,15 +16,7 @@ import { Router } from '@angular/router';
   imports: [
     CommonModule,
     FormsModule,
-    IonContent,
-    IonCard,
-    IonCardHeader,
-    IonCardTitle,
-    IonCardContent,
-    IonItem,
-    IonLabel,
-    IonInput,
-    IonButton
+    IonicModule
   ]
 })
 

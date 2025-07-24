@@ -18,7 +18,14 @@ import {
   setDoc
 } from '@angular/fire/firestore';
 import { Capacitor } from '@capacitor/core';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
+import { FirebaseError } from '@angular/fire/app';
+
+interface GoogleAuthError extends Error {
+  code?: string;
+  message: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -29,8 +36,11 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<any | null>(null);
   user$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private iab: InAppBrowser) {
     const cachedUser = this.getCachedUser();
+    if (Capacitor.isNativePlatform()) {
+      GoogleAuth.initialize();
+    }
     if (cachedUser) {
       this.currentUserSubject.next(cachedUser);
     }
@@ -55,31 +65,91 @@ export class AuthService {
   }
 
   async loginWithGoogle() {
-    const isNative = Capacitor.getPlatform() !== 'web';
+    try {
+      if (Capacitor.isNativePlatform()) {
+        await this.handleNativeGoogleLogin();
+      } else {
+        await this.handleWebGoogleLogin();
+      }
+      this.router.navigateByUrl('/home');
+    } catch (error: unknown) {
+      const errorMessage = this.getErrorMessage(error);
+      console.error('Erro no login com Google:', errorMessage);
+      throw new Error(errorMessage);
+    }
+  }
 
-    let userCredential;
+  private async handleNativeGoogleLogin() {
+    // Inicialização garantida
+    await GoogleAuth.initialize();
 
-    if (isNative) {
-      const googleUser = await GoogleAuth.signIn();
-      const credential = GoogleAuthProvider.credential(googleUser.authentication.idToken);
-      userCredential = await signInWithCredential(this.auth, credential);
-    } else {
-      const provider = new GoogleAuthProvider();
-      userCredential = await signInWithPopup(this.auth, provider);
+    const googleUser = await GoogleAuth.signIn();
+
+    if (!googleUser?.authentication?.idToken) {
+      throw new Error('Token de autenticação não recebido do Google');
     }
 
-    // Criação do usuário no Firestore, se necessário
-    const userRef = doc(this.firestore, `users/${userCredential.user.uid}`);
+    const credential = GoogleAuthProvider.credential(
+      googleUser.authentication.idToken,
+      googleUser.authentication.accessToken
+    );
+
+    await signInWithCredential(this.auth, credential);
+  }
+
+  private async handleWebGoogleLogin() {
+    const provider = new GoogleAuthProvider();
+    await signInWithPopup(this.auth, provider);
+  }
+
+  private getErrorMessage(error: unknown): string {
+    if (error instanceof FirebaseError) {
+      return `Erro Firebase: ${error.code} - ${error.message}`;
+    } else if (error instanceof Error) {
+      return error.message;
+    } else if (typeof error === 'object' && error !== null && 'message' in error) {
+      return String(error.message);
+    }
+    return 'Ocorreu um erro desconhecido durante o login com Google';
+  }
+  private async updateUserData(user: User) {
+    const userRef = doc(this.firestore, `users/${user.uid}`);
     const snap = await getDoc(userRef);
+
+    const userData = {
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      lastLogin: new Date().toISOString()
+    };
+
     if (!snap.exists()) {
       await setDoc(userRef, {
-        email: userCredential.user.email,
-        role: 'user'
+        ...userData,
+        role: 'user',
+        createdAt: new Date().toISOString()
       });
+    } else {
+      await setDoc(userRef, {
+        ...userData,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
     }
-
-    this.router.navigateByUrl('/home');
   }
+
+  private async initializeGoogleAuth() {
+    try {
+      // Não existe método para verificar se está inicializado, então tentamos diretamente
+      await GoogleAuth.initialize();
+    } catch (error) {
+      console.warn('GoogleAuth já inicializado ou erro na inicialização:', error);
+    }
+  }
+  private extrairTokenDaUrl(url: string): string {
+    const match = url.match(/id_token=([^&]*)/);
+    return match ? decodeURIComponent(match[1]) : '';
+  }
+
 
   logout() {
     signOut(this.auth);

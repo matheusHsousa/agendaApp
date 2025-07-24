@@ -5,7 +5,7 @@
   width: 100vw;
   height: 100vh;
   z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.6); // fundo escuro com transparência
+  background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -13,10 +13,12 @@
   color: white;
   font-size: 1.2rem;
   text-align: center;
+  margin-top: 0px;
 }
 
 .custom-loader-overlay img {
-  width: 100px;
-  height: 100px;
-  margin-bottom: 15px;
+    width: 124px;
+    height: 100px;
+    object-fit: cover;
+    mix-blend-mode: lighten;
 }

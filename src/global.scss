@@ -39,3 +39,9 @@
 * {
   font-family: 'Montserrat', sans-serif;
 }
+
+ion-app, ion-content {
+  padding-top: env(safe-area-inset-top);
+  padding-top: constant(safe-area-inset-top);
+}
+
