@@ -3,6 +3,7 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { LoadingService } from './services/loading.service';
 import { CustomLoaderPage } from './../app/pages/custom-loader/custom-loader.page';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -14,12 +15,13 @@ import { CustomLoaderPage } from './../app/pages/custom-loader/custom-loader.pag
 export class AppComponent {
   isLoading = true;
 
-  constructor(private loadingService: LoadingService) {}
+  constructor(private loadingService: LoadingService, private authService: AuthService) { }
 
-   
-  ngOnInit() {
+
+  async ngOnInit() {
     this.loadingService.loading$.subscribe(status => {
       this.isLoading = status;
     });
+    await this.authService.handleRedirectCallback();
   }
 }

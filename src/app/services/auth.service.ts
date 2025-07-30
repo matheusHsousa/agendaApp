@@ -191,4 +191,18 @@ export class AuthService {
   private clearCachedUser() {
     localStorage.removeItem('cachedUser');
   }
+
+  async handleRedirectCallback() {
+  try {
+    const result = await getRedirectResult(this.auth);
+    if (result && result.user) {
+      await this.updateUserData(result.user);
+      this.router.navigateByUrl('/home');
+    }
+  } catch (error) {
+    const errorMessage = this.getErrorMessage(error);
+    console.error('Erro no callback do redirect:', errorMessage);
+  }
+}
+
 }
