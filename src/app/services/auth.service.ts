@@ -7,8 +7,6 @@ import {
   User,
   GoogleAuthProvider,
   signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
   signInWithCredential
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -40,24 +38,12 @@ export class AuthService {
 
   constructor(private iab: InAppBrowser) {
     const cachedUser = this.getCachedUser();
-
     if (Capacitor.isNativePlatform()) {
       GoogleAuth.initialize();
     }
-
     if (cachedUser) {
       this.currentUserSubject.next(cachedUser);
     }
-
-    // Trata o resultado do login via redirect
-    getRedirectResult(this.auth).then(async (result) => {
-      if (result?.user) {
-        await this.updateUserData(result.user);
-        this.router.navigateByUrl('/home');
-      }
-    }).catch(error => {
-      console.error('Erro ao obter resultado do redirect:', error);
-    });
 
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
@@ -86,6 +72,7 @@ export class AuthService {
       } else {
         await this.handleWebGoogleLogin();
       }
+      this.router.navigateByUrl('/home');
     } catch (error: unknown) {
       const errorMessage = this.getErrorMessage(error);
       console.error('Erro no login com Google:', errorMessage);
@@ -108,21 +95,12 @@ export class AuthService {
 
     const result = await signInWithCredential(this.auth, credential);
     await this.updateUserData(result.user);
-    this.router.navigateByUrl('/home');
   }
 
   private async handleWebGoogleLogin() {
     const provider = new GoogleAuthProvider();
-
-    if (this.isMobileBrowser()) {
-      // Redirecionamento para login em navegadores móveis
-      await signInWithRedirect(this.auth, provider);
-    } else {
-      // Login com popup para desktop e outros casos
-      const result = await signInWithPopup(this.auth, provider);
-      await this.updateUserData(result.user);
-      this.router.navigateByUrl('/home');
-    }
+    const result = await signInWithPopup(this.auth, provider);
+    await this.updateUserData(result.user);
   }
 
   private getErrorMessage(error: unknown): string {
@@ -202,10 +180,6 @@ export class AuthService {
 
   private clearCachedUser() {
     localStorage.removeItem('cachedUser');
-  }
-
-  private isMobileBrowser(): boolean {
-    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !Capacitor.isNativePlatform();
   }
 
   private async initializeGoogleAuth() {
