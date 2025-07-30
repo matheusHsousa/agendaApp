@@ -4,9 +4,11 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   User,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithCredential
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -22,11 +24,6 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { FirebaseError } from '@angular/fire/app';
 
-interface GoogleAuthError extends Error {
-  code?: string;
-  message: string;
-}
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private auth = inject(Auth);
@@ -38,9 +35,11 @@ export class AuthService {
 
   constructor(private iab: InAppBrowser) {
     const cachedUser = this.getCachedUser();
+
     if (Capacitor.isNativePlatform()) {
       GoogleAuth.initialize();
     }
+
     if (cachedUser) {
       this.currentUserSubject.next(cachedUser);
     }
@@ -72,7 +71,6 @@ export class AuthService {
       } else {
         await this.handleWebGoogleLogin();
       }
-      this.router.navigateByUrl('/home');
     } catch (error: unknown) {
       const errorMessage = this.getErrorMessage(error);
       console.error('Erro no login com Google:', errorMessage);
@@ -95,12 +93,23 @@ export class AuthService {
 
     const result = await signInWithCredential(this.auth, credential);
     await this.updateUserData(result.user);
+    this.router.navigateByUrl('/home');
   }
 
   private async handleWebGoogleLogin() {
     const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(this.auth, provider);
-    await this.updateUserData(result.user);
+
+    const isMobile =
+      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
+      window.innerWidth < 768;
+
+    if (isMobile) {
+      await signInWithRedirect(this.auth, provider);
+    } else {
+      const result = await signInWithPopup(this.auth, provider);
+      await this.updateUserData(result.user);
+      this.router.navigateByUrl('/home');
+    }
   }
 
   private getErrorMessage(error: unknown): string {
@@ -142,6 +151,7 @@ export class AuthService {
   logout() {
     signOut(this.auth);
     this.clearCachedUser();
+    this.router.navigateByUrl('/login');
   }
 
   get isLoggedIn(): boolean {
@@ -180,18 +190,5 @@ export class AuthService {
 
   private clearCachedUser() {
     localStorage.removeItem('cachedUser');
-  }
-
-  private async initializeGoogleAuth() {
-    try {
-      await GoogleAuth.initialize();
-    } catch (error) {
-      console.warn('GoogleAuth já inicializado ou erro na inicialização:', error);
-    }
-  }
-
-  private extrairTokenDaUrl(url: string): string {
-    const match = url.match(/id_token=([^&]*)/);
-    return match ? decodeURIComponent(match[1]) : '';
   }
 }
