@@ -14,12 +14,11 @@ import { CustomLoaderPage } from './../app/pages/custom-loader/custom-loader.pag
 export class AppComponent {
   isLoading = true;
 
-   constructor(private loadingService: LoadingService) {}
+  constructor(private loadingService: LoadingService) {}
 
    
   ngOnInit() {
     this.loadingService.loading$.subscribe(status => {
-      console.log('status', status); // Adicione isso
       this.isLoading = status;
     });
   }

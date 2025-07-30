@@ -59,7 +59,6 @@ export class UserSchedulePage implements OnInit {
       data
     ) => {;
     this.agendamentos = data
-    console.log(this.agendamentos)
 
     const primeiroDia = moment(new Date(this.anoAtual, this.mesAtual)).startOf('month');
     const qtdDias = primeiroDia.daysInMonth();

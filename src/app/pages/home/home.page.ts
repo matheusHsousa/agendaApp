@@ -5,7 +5,13 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import moment from 'moment';
-
+import {
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonIcon,
+  IonContent
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +20,11 @@ import moment from 'moment';
   standalone: true,
   imports: [
     CommonModule,
-    IonicModule,
+    IonCard,
+    IonCardHeader,
+    IonCardTitle,
+    IonIcon,
+    IonContent
   ],
 })
 export class HomePage {
@@ -116,8 +126,6 @@ abrirPix() {
 
   // Payload final
   const payload = payloadWithoutCRC + crc;
-
-  console.log('Payload PIX:', payload);
 
   // Montar intent para abrir app Nubank no Android
   const intentLink = `intent://${payload}#Intent;scheme=pix;package=br.com.nu.prod;end;`;

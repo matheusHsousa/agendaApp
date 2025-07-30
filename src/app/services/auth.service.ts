@@ -7,6 +7,8 @@ import {
   User,
   GoogleAuthProvider,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signInWithCredential
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
@@ -38,12 +40,24 @@ export class AuthService {
 
   constructor(private iab: InAppBrowser) {
     const cachedUser = this.getCachedUser();
+
     if (Capacitor.isNativePlatform()) {
       GoogleAuth.initialize();
     }
+
     if (cachedUser) {
       this.currentUserSubject.next(cachedUser);
     }
+
+    // Trata o resultado do login via redirect
+    getRedirectResult(this.auth).then(async (result) => {
+      if (result?.user) {
+        await this.updateUserData(result.user);
+        this.router.navigateByUrl('/home');
+      }
+    }).catch(error => {
+      console.error('Erro ao obter resultado do redirect:', error);
+    });
 
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
@@ -60,7 +74,8 @@ export class AuthService {
   }
 
   async login(email: string, password: string) {
-    await signInWithEmailAndPassword(this.auth, email, password);
+    const result = await signInWithEmailAndPassword(this.auth, email, password);
+    await this.updateUserData(result.user);
     this.router.navigateByUrl('/home');
   }
 
@@ -71,7 +86,6 @@ export class AuthService {
       } else {
         await this.handleWebGoogleLogin();
       }
-      this.router.navigateByUrl('/home');
     } catch (error: unknown) {
       const errorMessage = this.getErrorMessage(error);
       console.error('Erro no login com Google:', errorMessage);
@@ -80,9 +94,7 @@ export class AuthService {
   }
 
   private async handleNativeGoogleLogin() {
-    // Inicialização garantida
     await GoogleAuth.initialize();
-
     const googleUser = await GoogleAuth.signIn();
 
     if (!googleUser?.authentication?.idToken) {
@@ -94,12 +106,23 @@ export class AuthService {
       googleUser.authentication.accessToken
     );
 
-    await signInWithCredential(this.auth, credential);
+    const result = await signInWithCredential(this.auth, credential);
+    await this.updateUserData(result.user);
+    this.router.navigateByUrl('/home');
   }
 
   private async handleWebGoogleLogin() {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(this.auth, provider);
+
+    if (this.isMobileBrowser()) {
+      // Redirecionamento para login em navegadores móveis
+      await signInWithRedirect(this.auth, provider);
+    } else {
+      // Login com popup para desktop e outros casos
+      const result = await signInWithPopup(this.auth, provider);
+      await this.updateUserData(result.user);
+      this.router.navigateByUrl('/home');
+    }
   }
 
   private getErrorMessage(error: unknown): string {
@@ -112,6 +135,7 @@ export class AuthService {
     }
     return 'Ocorreu um erro desconhecido durante o login com Google';
   }
+
   private async updateUserData(user: User) {
     const userRef = doc(this.firestore, `users/${user.uid}`);
     const snap = await getDoc(userRef);
@@ -136,20 +160,6 @@ export class AuthService {
       }, { merge: true });
     }
   }
-
-  private async initializeGoogleAuth() {
-    try {
-      // Não existe método para verificar se está inicializado, então tentamos diretamente
-      await GoogleAuth.initialize();
-    } catch (error) {
-      console.warn('GoogleAuth já inicializado ou erro na inicialização:', error);
-    }
-  }
-  private extrairTokenDaUrl(url: string): string {
-    const match = url.match(/id_token=([^&]*)/);
-    return match ? decodeURIComponent(match[1]) : '';
-  }
-
 
   logout() {
     signOut(this.auth);
@@ -192,5 +202,22 @@ export class AuthService {
 
   private clearCachedUser() {
     localStorage.removeItem('cachedUser');
+  }
+
+  private isMobileBrowser(): boolean {
+    return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) && !Capacitor.isNativePlatform();
+  }
+
+  private async initializeGoogleAuth() {
+    try {
+      await GoogleAuth.initialize();
+    } catch (error) {
+      console.warn('GoogleAuth já inicializado ou erro na inicialização:', error);
+    }
+  }
+
+  private extrairTokenDaUrl(url: string): string {
+    const match = url.match(/id_token=([^&]*)/);
+    return match ? decodeURIComponent(match[1]) : '';
   }
 }
