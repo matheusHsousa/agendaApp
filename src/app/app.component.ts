@@ -18,10 +18,10 @@ export class AppComponent {
   constructor(private loadingService: LoadingService, private authService: AuthService) { }
 
 
-  async ngOnInit() {
+  ngOnInit() {
     this.loadingService.loading$.subscribe(status => {
       this.isLoading = status;
     });
-    await this.authService.handleRedirectCallback();
+    this.authService.handleRedirectCallback();
   }
 }

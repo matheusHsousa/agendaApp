@@ -5,7 +5,6 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithPopup,
-  signInWithRedirect,
   getRedirectResult,
   User,
   GoogleAuthProvider,
@@ -98,17 +97,21 @@ export class AuthService {
 
   private async handleWebGoogleLogin() {
     const provider = new GoogleAuthProvider();
+    const isCapacitor = Capacitor.isNativePlatform();
 
-    const isMobile =
-      /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ||
-      window.innerWidth < 768;
-
-    if (isMobile) {
-      await signInWithRedirect(this.auth, provider);
+    // Usa signInWithPopup sempre que estiver na web (mesmo em mobile)
+    if (!isCapacitor) {
+      try {
+        const result = await signInWithPopup(this.auth, provider);
+        await this.updateUserData(result.user);
+        this.router.navigateByUrl('/home');
+      } catch (error) {
+        const errorMessage = this.getErrorMessage(error);
+        console.error('Erro no login com popup:', errorMessage);
+        throw new Error(errorMessage);
+      }
     } else {
-      const result = await signInWithPopup(this.auth, provider);
-      await this.updateUserData(result.user);
-      this.router.navigateByUrl('/home');
+      throw new Error('WebGoogleLogin chamado em plataforma nativa. Use login nativo.');
     }
   }
 
@@ -193,16 +196,15 @@ export class AuthService {
   }
 
   async handleRedirectCallback() {
-  try {
-    const result = await getRedirectResult(this.auth);
-    if (result && result.user) {
-      await this.updateUserData(result.user);
-      this.router.navigateByUrl('/home');
+    try {
+      const result = await getRedirectResult(this.auth);
+      if (result && result.user) {
+        await this.updateUserData(result.user);
+        this.router.navigateByUrl('/home');
+      }
+    } catch (error) {
+      const errorMessage = this.getErrorMessage(error);
+      console.error('Erro no callback do redirect:', errorMessage);
     }
-  } catch (error) {
-    const errorMessage = this.getErrorMessage(error);
-    console.error('Erro no callback do redirect:', errorMessage);
   }
-}
-
 }
