@@ -8,7 +8,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: opacity 0.2s ease-out;
 }
+
 
 .sum-temp {
   position: absolute;
@@ -71,6 +73,7 @@
   padding: 12px 0 10px 0;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .evento-card {
@@ -110,6 +113,11 @@ ion-card {
   cursor: pointer;
 }
 
+ion-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
 ion-card:hover {
   transform: scale(1.01);
 }
@@ -124,7 +132,137 @@ ion-card[color="primary"] {
   color: #fff;
 }
 
+
 .sem-margem {
   margin: 0px 0px 20px 0px;
   border-radius: 0;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+ion-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-degrade1, .card-degrade2, .card-degrade3, .card-degrade4 {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 12px 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/* Ícone e texto */
+.titulo-com-icone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1;
+  position: relative;
+  color: white;
+}
+
+/* Ícones pretos não funcionam aqui */
+ion-icon {
+  color: white !important;
+}
+
+.card-degrade1 {
+  background: linear-gradient(to right, #3949ab, #5c6bc0); /* azul mais suave */
+}
+
+.card-degrade2 {
+  background: linear-gradient(to right, #fdd835, #ffeb3b); /* amarelo mais claro */
+  color: #333;
+}
+
+.card-degrade3 {
+  background: linear-gradient(to right, #4dd0e1, #80deea); /* ciano suave */
+}
+
+.card-degrade4 {
+  background: linear-gradient(to right, #f06292, #f48fb1); /* rosa suave */
+}
+
+.card-degrade1::after,
+.card-degrade2::after,
+.card-degrade3::after,
+.card-degrade4::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 80px;
+  width: 100%;
+  height: 100%;
+  background-image: url('../../../assets/images/dizimo.jpg'); /* Troque conforme o card */
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: cover;
+
+  /* Efeito gradiente para sumir pra cima */
+  -webkit-mask-image: linear-gradient(to right, transparent 10%, black 90%);
+  mask-image: linear-gradient(to right, transparent 5%, black 90%);
+
+  opacity: 0.6;
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+ion-card:hover::after {
+  opacity: 0.25;
+  transition: opacity 0.3s ease;
+}
+
+
+/* Imagens específicas */
+.card-degrade1::after {
+  background-image: url('../../../assets/images/dizimo.jpg');
+}
+
+.card-degrade2::after {
+  background-image: url('../../../assets/images/es.jpg');
+}
+
+.card-degrade3::after {
+  background-image: url('../../../assets/images/igreja.png');
+}
+
+.card-degrade4::after {
+  background-image: url('../../../assets/images/redes.webp');
+}
+
+.card-degrade1, .card-degrade2, .card-degrade3, .card-degrade4 {
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }

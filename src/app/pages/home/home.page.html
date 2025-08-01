@@ -1,6 +1,6 @@
-<ion-content [fullscreen]="true" class="home-content">
+<ion-content [fullscreen]="true" class="home-content" (ionScroll)="onScroll($event)" scrollEvents="true">
   <div class="imagem-parallax">
-    <img src="../../assets/images/igreja.png" />
+    <img id="headerImage" src="../../assets/images/igreja.png" />
 
     <ion-avatar class="photo-icon">
       <img [src]="user?.photoURL || './../../../assets/images/sem_imagem_avatar.png'" alt="Foto de perfil" />
@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <ion-card class="sem-margem" *ngIf="proximosEventos.length > 0">
+  <ion-card class="sem-margem fade-in" *ngIf="proximosEventos.length > 0">
     <div class="carrossel-container">
       <label class="titulo-evento">Próximos Eventos</label>
 
@@ -30,18 +30,19 @@
   </ion-card>
 
   <div>
-    <ion-card (click)="goToAdmin()">
+    <ion-card class="fade-in card-degrade1" (click)="goToAdmin()" #animado data-delay="0">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
-            <ion-icon name="card"></ion-icon>
+            <ion-icon name="Card"></ion-icon>
             <span>Dizimar e ofertar</span>
           </div>
         </ion-card-title>
       </ion-card-header>
     </ion-card>
 
-    <ion-card color="warning" (click)="goToSabbathSchool()">
+    <!-- Card 2 — Amarelo (Escola Sabatina) -->
+    <ion-card class="fade-in card-degrade2" (click)="goToSabbathSchool()" #animado data-delay="100">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -52,7 +53,8 @@
       </ion-card-header>
     </ion-card>
 
-    <ion-card color="primary" (click)="goToUserSchedule()">
+    <!-- Card 3 — Azul Claro (Agenda) -->
+    <ion-card class="fade-in card-degrade3" (click)="goToUserSchedule()" #animado data-delay="200">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -63,7 +65,8 @@
       </ion-card-header>
     </ion-card>
 
-    <ion-card>
+    <!-- Card 4 — Rosa (Mídias Sociais) -->
+    <ion-card class="fade-in card-degrade4" #animado data-delay="300">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -73,5 +76,7 @@
         </ion-card-title>
       </ion-card-header>
     </ion-card>
+
   </div>
+
 </ion-content>
