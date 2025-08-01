@@ -26,6 +26,7 @@
     "@awesome-cordova-plugins/in-app-browser": "^8.0.2",
     "@capacitor/android": "7.4.2",
     "@capacitor/app": "7.0.1",
+    "@capacitor/browser": "^7.0.1",
     "@capacitor/core": "7.4.2",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/keyboard": "7.0.1",
@@ -42,6 +43,7 @@
     "pix-payload": "^1.0.4",
     "pix-utils": "^2.8.1",
     "rxjs": "~7.8.0",
+    "suncalc": "^1.9.0",
     "swiper": "^9.4.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

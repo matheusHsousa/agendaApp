@@ -28,7 +28,7 @@ export class LoginPage {
   constructor(private auth: AuthService, private router: Router) {
     this.auth.user$.subscribe(user => {
       if (user) {
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('tabs/home');
       }
     });
   }

@@ -12,9 +12,12 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
+  provideAnimations(),
   provideHttpClient(withInterceptors([LoadingInterceptor])),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     provideIonicAngular(),

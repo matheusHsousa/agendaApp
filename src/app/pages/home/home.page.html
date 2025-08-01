@@ -1,31 +1,36 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="home-content">
   <div class="imagem-parallax">
     <img src="../../assets/images/igreja.png" />
-    <ion-icon name="person-circle" class="icon-admin" *ngIf="isAdmin" (click)="goToAdmin()"
-      style="cursor: pointer;"></ion-icon>
-  </div>
 
-  <ion-card style="margin: 0px; border-radius: 0px;">
-      <div class="carrossel-container" *ngIf="proximosEventos.length > 0">
-    
-    <label style="margin-left: 10px; color: #4d8dff;">Próximos Eventos</label>
+    <ion-avatar class="photo-icon">
+      <img [src]="user?.photoURL || './../../../assets/images/sem_imagem_avatar.png'" alt="Foto de perfil" />
+    </ion-avatar>
 
-    <div class="carrossel-wrapper">
-      <div class="evento-card" *ngFor="let evento of proximosEventos">
-        <ion-card style="display: flex; flex-direction: column; padding: 10px; margin: 5px 0px 0px 10px; "> 
-            <label><strong>{{ evento.nomeEvento }}</strong></label>
-            <label>{{ evento.nomePregador }}</label>
-            <label style="display: flex; align-items: center; gap: 5px;"><ion-icon slot="start" name="calendar"></ion-icon> {{ formatarDia(evento.dataHora) }} |
-             {{ formatarHora(evento.dataHora) }}</label>
-        </ion-card>
-      </div>
+    <div class="sum-temp">
+      <p>🌇 Horário do pôr do sol</p>
+      <p>{{ sunsetTime }}</p>
     </div>
   </div>
+
+  <ion-card class="sem-margem" *ngIf="proximosEventos.length > 0">
+    <div class="carrossel-container">
+      <label class="titulo-evento">Próximos Eventos</label>
+
+      <div class="carrossel-wrapper">
+        <div class="evento-card" *ngFor="let evento of proximosEventos">
+          <label><strong>Evento: {{ evento.nomeEvento }}</strong></label>
+          <label>Pregador: {{ evento.nomePregador }}</label>
+          <label class="data-hora-evento">
+            <ion-icon slot="start" name="calendar"></ion-icon>
+            {{ formatarDia(evento.dataHora) }} | {{ formatarHora(evento.dataHora) }}
+          </label>
+        </div>
+      </div>
+    </div>
   </ion-card>
 
-
   <div>
-    <ion-card (click)="abrirPix()">
+    <ion-card (click)="goToAdmin()">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -52,18 +57,18 @@
         <ion-card-title>
           <div class="titulo-com-icone">
             <ion-icon name="calendar"></ion-icon>
-            <span >Agenda Cidade Dutra</span>
+            <span>Agenda Cidade Dutra</span>
           </div>
         </ion-card-title>
       </ion-card-header>
     </ion-card>
-    
+
     <ion-card>
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
             <ion-icon name="logo-instagram"></ion-icon>
-            <span>Midias Sociais</span>
+            <span>Mídias Sociais</span>
           </div>
         </ion-card-title>
       </ion-card-header>
