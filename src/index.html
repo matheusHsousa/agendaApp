@@ -23,17 +23,20 @@
   <link rel="manifest" href="assets/manifest.webmanifest">
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function (OneSignal) {
-      await OneSignal.init({
-        appId: "4bc30d9a-f6d3-4b56-b1ed-1931a2a55960",
-        allowLocalhostAsSecureOrigin: true,
-        notifyButton: {
-          enable: true,
-        },
-      });
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function (OneSignal) {
+    await OneSignal.init({
+      appId: "4bc30d9a-f6d3-4b56-b1ed-1931a2a55960",
+      serviceWorkerPath: "OneSignalSDKWorker.js",
+      serviceWorkerUpdaterPath: "OneSignalSDKUpdaterWorker.js",
+      allowLocalhostAsSecureOrigin: true,
+      notifyButton: {
+        enable: true,
+      },
     });
-  </script>
+  });
+</script>
+
 </head>
 
 <body>
