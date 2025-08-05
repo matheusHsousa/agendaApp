@@ -27,6 +27,10 @@
     OneSignalDeferred.push(async function (OneSignal) {
       await OneSignal.init({
         appId: "4bc30d9a-f6d3-4b56-b1ed-1931a2a55960",
+        allowLocalhostAsSecureOrigin: true,
+        notifyButton: {
+          enable: true,
+        },
       });
     });
   </script>
