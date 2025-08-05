@@ -1,0 +1,12 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Meditações</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<iframe *ngIf="link" [src]="link" style="width:100%; height:100%; border:none;"></iframe>

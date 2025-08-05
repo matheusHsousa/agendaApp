@@ -38,6 +38,7 @@ import { getTimes } from 'suncalc';
     IonAvatar
   ],
 })
+
 export class HomePage implements AfterViewInit {
   role: string | null = null;
   isAdmin = false;
@@ -65,7 +66,13 @@ export class HomePage implements AfterViewInit {
 
   async ngOnInit() {
     this.user = await this.usersInfoService.getUser();
-    this.definirHorarioPorDoSol(-23.55052, -46.633308); 
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      Notification.requestPermission();
+    }
+
+    this.notifySum();
+
+    this.definirHorarioPorDoSol(-23.55052, -46.633308);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -100,6 +107,22 @@ export class HomePage implements AfterViewInit {
     });
   }
 
+  notifySum() {
+    const hoje = new Date();
+    const diaDaSemana = hoje.getDay();
+
+    if (diaDaSemana === 5 && Notification.permission === 'granted') {
+      setTimeout(() => {
+        if (this.sunsetTime) {
+          new Notification('Início do Sábado', {
+            body: `O pôr do sol será às ${this.sunsetTime}. Feliz Sábado!`,
+            icon: '/assets/icon/icon.png'
+          });
+        }
+      }, 2000);
+    }
+
+  }
 
   definirHorarioPorDoSol(lat: number, lon: number) {
     const times = getTimes(new Date(), lat, lon);

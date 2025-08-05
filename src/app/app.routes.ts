@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { LoginPage } from './pages/login/login.page';
 import { HomePage } from './pages/home/home.page';
 import { isLoggedInGuard, isAdminGuard } from './guards/auth.guard';
+import { BibliaPage } from './pages/biblia/biblia.page';
+import { MeditacoesPage } from './pages/meditacoes/meditacoes.page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,6 +18,16 @@ export const routes: Routes = [
       {
         path: 'home',
         component: HomePage,
+        canActivate: [isLoggedInGuard],
+      },
+      {
+        path: 'biblia',
+        component: BibliaPage,
+        canActivate: [isLoggedInGuard],
+      },
+        {
+        path: 'meditacoes',
+        component: MeditacoesPage,
         canActivate: [isLoggedInGuard],
       },
       {
@@ -43,11 +55,14 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/sabbath-school/sabbath-school.page').then(m => m.SabbathSchoolPage),
       },
       { path: '', redirectTo: 'home', pathMatch: 'full' }, 
-      { path: 'schedule', redirectTo: 'schedule', pathMatch: 'full' }, 
-      { path: 'tyyministries', redirectTo: 'ministries', pathMatch: 'full' }, 
+      { path: 'biblia', redirectTo: 'biblia', pathMatch: 'full' }, 
+      { path: 'meditacoes', redirectTo: 'meditacoes', pathMatch: 'full' }, 
     ],
+  },  {
+    path: 'iframe-medi',
+    loadComponent: () => import('./pages/iframe-medi/iframe-medi.page').then( m => m.IframeMediPage)
   },
 
-  // Se quiser rotas fora das tabs, pode manter aqui
+
 ];
 

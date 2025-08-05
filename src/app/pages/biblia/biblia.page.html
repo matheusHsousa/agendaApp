@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <div class="toolbar">
+      
+      <div>
+        <ion-select [(ngModel)]="livroSelecionado"
+                    (ionChange)="onLivroChange($event)"
+                    placeholder="Livro"
+                    interface="popover">
+          <ion-select-option *ngFor="let livro of bibleData" [value]="livro">
+            {{ livro.name }}
+          </ion-select-option>
+        </ion-select>
+      </div>
+
+      <div>
+        <ion-buttons>
+          <ion-button (click)="anteriorCapitulo()" [disabled]="indiceCapituloAtual === 0" size="small">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </ion-button>
+
+          <ion-select [(ngModel)]="indiceCapituloAtual"
+                      (ionChange)="onCapituloChange($event)"
+                      placeholder="Capítulo"
+                      interface="popover">
+            <ng-container *ngIf="livroSelecionado">
+              <ion-select-option *ngFor="let capitulo of livroSelecionado.chapters; let i = index" [value]="i">
+                {{ i + 1 }} Cap.
+              </ion-select-option>
+            </ng-container>
+          </ion-select>
+
+          <ion-button (click)="proximoCapitulo()" size="small">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </div>
+
+      <div>
+        <ion-select [(ngModel)]="indiceVersiculoAtual"
+                    (ionChange)="onVersiculoChange($event)"
+                    interface="popover"
+                    placeholder="Versículo">
+          <ion-select-option *ngFor="let v of capituloAtual; let i = index" [value]="i">
+            {{ v.numero }} Ver.
+          </ion-select-option>
+        </ion-select>
+      </div>
+      
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [scrollEvents]="true" #content>
+  <div class="versiculos" style="padding: 10px;">
+    <div *ngFor="let versiculo of capituloAtual; let i = index" [id]="'versiculo-' + (i + 1)"
+      (click)="selecionarVersiculo(i)" class="versiculo">
+      <strong>{{ versiculo.numero }}.</strong> {{ versiculo.texto }}
+    </div>
+  </div>
+</ion-content>

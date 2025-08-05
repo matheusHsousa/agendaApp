@@ -1,0 +1,20 @@
+<ion-content [fullscreen]="true">
+  <div class="content">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-title size="large">Meditações</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-slides [options]="slideOpts">
+      <ion-slide>
+        <div class="icon-grid">
+          <div class="icon-slide" *ngFor="let item of icons" (click)="abrir(item.link)">
+            <img [src]="item.img" alt="{{ item.label }}" />
+            <p>{{ item.label }}</p>
+          </div>
+        </div>
+      </ion-slide>
+    </ion-slides>
+  </div>
+</ion-content>
