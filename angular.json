@@ -36,13 +36,13 @@
               },
               {
                 "glob": "OneSignalSDKWorker.js",
-                "input": "./",
-                "output": "./"
+                "input": "src",
+                "output": "."
               },
               {
                 "glob": "OneSignalSDKUpdaterWorker.js",
-                "input": "./",
-                "output": "./"
+                "input": "src",
+                "output": "."
               }
             ],
             "styles": [
