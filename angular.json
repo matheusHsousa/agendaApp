@@ -36,12 +36,12 @@
               },
               {
                 "glob": "OneSignalSDKWorker.js",
-                "input": "src",
+                "input": "./",
                 "output": "./"
               },
               {
                 "glob": "OneSignalSDKUpdaterWorker.js",
-                "input": "src",
+                "input": "./",
                 "output": "./"
               }
             ],
@@ -73,8 +73,7 @@
                 }
               ],
               "outputHashing": "all",
-              "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,
