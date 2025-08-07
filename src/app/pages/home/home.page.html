@@ -3,7 +3,7 @@
     <img id="headerImage" src="../../assets/images/igreja.png" />
 
     <ion-avatar class="photo-icon">
-      <img [src]="avatarUrl"/>
+      <img [src]="avatarUrl" />
     </ion-avatar>
 
 
@@ -66,7 +66,7 @@
     </ion-card>
 
     <!-- Card 4 — Rosa (Mídias Sociais) -->
-    <ion-card class="fade-in card-degrade4" #animado data-delay="300">
+    <ion-card class="fade-in card-degrade4" #animado data-delay="300" (click)="abrirInstagram()">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -76,7 +76,6 @@
         </ion-card-title>
       </ion-card-header>
     </ion-card>
-
   </div>
 
 </ion-content>

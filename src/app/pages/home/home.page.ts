@@ -222,4 +222,9 @@ export class HomePage implements AfterViewInit {
       console.error('Erro ao abrir Pix:', err);
     }
   }
+
+  abrirInstagram() {
+  window.open('https://www.instagram.com/adventistascidadedutra/', '_blank');
+}
+
 }
