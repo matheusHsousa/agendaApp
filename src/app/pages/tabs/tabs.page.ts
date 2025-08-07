@@ -12,18 +12,19 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import moment from 'moment';
 import { ScheduleService } from 'src/app/services/schedule.service';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
   standalone: true,
-  imports: [ 
+  imports: [
     IonTabBar,
     IonTabs,
     IonTabButton,
-    IonLabel, 
-    CommonModule, 
+    IonLabel,
+    CommonModule,
     FormsModule,
     IonIcon
   ]
@@ -32,11 +33,13 @@ export class TabsPage {
   role: string | null = null;
   isAdmin = false;
   proximosEventos: any[] = [];
+  tabOrder = ['home', 'biblia', 'meditacoes', 'admin'];
+  currentTab: string = 'home';
 
   constructor(
     private authService: AuthService,
     private scheduleService: ScheduleService,
-    private router: Router
+    private navigationService: NavigationService
   ) {
     this.authService.user$.subscribe(async user => {
       if (user) {
@@ -48,17 +51,29 @@ export class TabsPage {
 
   }
 
+  onTabChange(event: any) {
+    const selectedTab = event.tab;
+    const currentIndex = this.tabOrder.indexOf(this.currentTab);
+    const nextIndex = this.tabOrder.indexOf(selectedTab);
+
+    const direction = nextIndex > currentIndex ? 'left' : 'right';
+
+    this.navigationService.updateCurrentTab(selectedTab);
+    this.navigationService['animate'](direction); // ou expose animate() publicamente
+    this.currentTab = selectedTab;
+  }
+
 
   async carregarProximosEventos(uid: string) {
-      this.scheduleService.listarSchedules().subscribe((data) => {
-        const todosEventos = data
-  
-        const agora = moment();
-        const futuros = todosEventos.filter((e: any) => moment(e.dataHora).isSameOrAfter(agora));
-  
-        futuros.sort((a: any, b: any) => moment(a.dataHora).diff(moment(b.dataHora)));
-  
-        this.proximosEventos = futuros.slice(0, 3);
-      })
-    }
+    this.scheduleService.listarSchedules().subscribe((data) => {
+      const todosEventos = data
+
+      const agora = moment();
+      const futuros = todosEventos.filter((e: any) => moment(e.dataHora).isSameOrAfter(agora));
+
+      futuros.sort((a: any, b: any) => moment(a.dataHora).diff(moment(b.dataHora)));
+
+      this.proximosEventos = futuros.slice(0, 3);
+    })
+  }
 }

@@ -1,4 +1,4 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
@@ -21,6 +21,7 @@ import { ScheduleService } from 'src/app/services/schedule.service';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import { MinistryService } from 'src/app/services/ministries.service';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-schedules',
@@ -76,7 +77,7 @@ export class SchedulesComponent {
   ministerios: any[] = [];
 
 
-  constructor(private ministryService: MinistryService, private scheduleService: ScheduleService, private location: Location) { }
+  constructor(private ministryService: MinistryService, private scheduleService: ScheduleService, private navigationService: NavigationService) { }
 
   ngOnInit() {
     moment.locale('pt-br');
@@ -188,7 +189,7 @@ export class SchedulesComponent {
   }
 
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
 
   async excluirEvento(id: string) {

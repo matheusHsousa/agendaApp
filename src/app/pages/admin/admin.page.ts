@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import {
   IonContent,
@@ -15,6 +16,7 @@ import {
 } from '@ionic/angular/standalone';
 
 import { calendar, people } from 'ionicons/icons';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-admin',
@@ -40,13 +42,13 @@ export class AdminPage {
     people
   };
 
-  constructor(private router: Router, private location: Location) { }
+  constructor(private router: Router, private navigationService: NavigationService) { }
 
   navegar(rota: string) {
     this.router.navigateByUrl(rota);
   }
 
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
 }

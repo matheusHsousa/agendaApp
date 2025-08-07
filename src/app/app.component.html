@@ -1,6 +1,4 @@
 <ion-app>
-  <!-- Custom Loader -->
-  <app-custom-loader [isLoading]="isLoading" />
-
-  <ion-router-outlet></ion-router-outlet>
+  <app-custom-loader [isLoading]="isLoading"></app-custom-loader>
+  <ion-router-outlet [animation]="fadeAnimation"></ion-router-outlet>
 </ion-app>

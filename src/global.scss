@@ -45,3 +45,28 @@ ion-app, ion-content {
   padding-top: constant(safe-area-inset-top);
 }
 
+ion-router-outlet.slide-left {
+  animation: slideLeft 300ms ease forwards;
+}
+
+ion-router-outlet.slide-right {
+  animation: slideRight 300ms ease forwards;
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

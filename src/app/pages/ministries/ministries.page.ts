@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MinistryService } from './../../services/ministries.service';
 import { Subscription } from 'rxjs';
 import { IonicModule } from '@ionic/angular';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-ministries',
@@ -24,7 +25,7 @@ export class MinistriesPage {
 
   private subscription?: Subscription;
 
-  constructor(private location: Location, private ministryService: MinistryService) { }
+  constructor(private navigationService: NavigationService, private ministryService: MinistryService) { }
 
   ngOnInit() {
     this.subscription = this.ministryService.listarMinisterios().subscribe(data => {
@@ -47,6 +48,6 @@ export class MinistriesPage {
   }
 
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
 }

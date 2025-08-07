@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-sabbath-school',
@@ -12,14 +13,12 @@ import { IonicModule } from '@ionic/angular';
 })
 export class SabbathSchoolPage implements OnInit {
 
-  constructor(private location: Location) { }
+  constructor(private navigationService: NavigationService) { }
 
   ngOnInit() {
   }
 
-  
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
-
 }

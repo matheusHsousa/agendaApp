@@ -4,6 +4,8 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { LoadingService } from './services/loading.service';
 import { CustomLoaderPage } from './../app/pages/custom-loader/custom-loader.page';
 import { AuthService } from './services/auth.service';
+import { AnimationController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-root',
@@ -15,8 +17,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   isLoading = true;
 
-  constructor(private loadingService: LoadingService, private authService: AuthService) { }
-
+  constructor(private loadingService: LoadingService, private authService: AuthService, private animationCtrl: AnimationController) { }
 
   ngOnInit() {
     this.loadingService.loading$.subscribe(status => {
@@ -24,4 +25,14 @@ export class AppComponent {
     });
     this.authService.handleRedirectCallback();
   }
+
+  fadeAnimation = (_baseEl: any, opts?: any) => {
+    const enteringEl = opts?.enteringEl;
+
+    return this.animationCtrl.create()
+      .addElement(enteringEl)
+      .duration(200) 
+      .fromTo('opacity', 0, 1);
+  };
+
 }

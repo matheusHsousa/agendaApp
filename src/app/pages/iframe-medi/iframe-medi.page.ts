@@ -4,6 +4,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Location, CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 
 @Component({
@@ -18,10 +19,10 @@ export class IframeMediPage implements OnInit {
   link: SafeResourceUrl = '';
 
   constructor(
-    private location: Location,
     private route: ActivatedRoute,
-    private sanitizer: DomSanitizer
-  ) {}
+    private sanitizer: DomSanitizer,
+    private navigationService: NavigationService
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -33,6 +34,6 @@ export class IframeMediPage implements OnInit {
   }
 
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
 }

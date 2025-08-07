@@ -6,6 +6,7 @@ import { ScheduleService } from 'src/app/services/schedule.service';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import { MinistryService } from 'src/app/services/ministries.service';
+import { NavigationService } from 'src/app/services/navigate.service';
 
 @Component({
   selector: 'app-user-schedule',
@@ -42,15 +43,13 @@ export class UserSchedulePage implements OnInit {
   menuSelecionado: string = 'formulario';
   ministerios: any[] = [];
 
-
-  constructor(private ministryService: MinistryService, private scheduleService: ScheduleService, private location: Location) {
+  constructor(private navigationService: NavigationService, private scheduleService: ScheduleService) {
   }
 
   ngOnInit() {
     moment.locale('pt-br');
     this.carregarAgendamentosDoMes();
   }
-
 
   async carregarAgendamentosDoMes() {
     this.diasNoCalendario = [];
@@ -95,7 +94,6 @@ export class UserSchedulePage implements OnInit {
     }, 100);
   }
 
-
   proximoMes() {
     if (this.mesAtual === 11) {
       this.mesAtual = 0;
@@ -121,7 +119,7 @@ export class UserSchedulePage implements OnInit {
   }
 
   voltar() {
-    this.location.back();
+    this.navigationService.back();
   }
 
   formatarDiaSemana(dataHora: string): string {
