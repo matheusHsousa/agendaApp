@@ -1,5 +1,5 @@
 .imagem-parallax {
-  height: 200px;
+  height: 250px;
   overflow: hidden;
   position: relative;
 }
@@ -198,18 +198,18 @@ ion-icon {
 }
 
 .card-degrade1 {
-  background: linear-gradient(to right, #3949ab, #5c6bc0);
+  background: linear-gradient(to right, #3964AB, #5c6bc0);
   /* azul mais suave */
 }
 
 .card-degrade2 {
-  background: linear-gradient(to right, #fdd835, #ffeb3b);
+  background: linear-gradient(to right, #EABB6B, #ffeb3b);
   /* amarelo mais claro */
   color: #333;
 }
 
 .card-degrade3 {
-  background: linear-gradient(to right, #4dd0e1, #80deea);
+  background: linear-gradient(to right, #5DA6EA, #80deea);
   /* ciano suave */
 }
 
@@ -226,7 +226,7 @@ ion-icon {
   position: absolute;
   bottom: 0;
   right: 0;
-  left: 80px;
+  left: 160px;
   width: 100%;
   height: 100%;
   background-image: url('../../../assets/images/dizimo.jpg');
