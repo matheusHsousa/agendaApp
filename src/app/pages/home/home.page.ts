@@ -5,7 +5,6 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
@@ -22,6 +21,14 @@ import {
 } from '@ionic/angular/standalone';
 import { UserService } from 'src/app/services/userInfo.service';
 import { getTimes } from 'suncalc';
+
+import { registerPlugin } from '@capacitor/core';
+
+interface OpenPixPlugin {
+  open(options: { code: string }): Promise<void>;
+}
+
+const OpenPix = registerPlugin<OpenPixPlugin>('OpenPix');
 
 @Component({
   selector: 'app-home',
@@ -105,6 +112,10 @@ export class HomePage implements AfterViewInit {
     this.elementosAnimaveis.forEach((el) => {
       observer.observe(el.nativeElement);
     });
+  }
+
+  get avatarUrl(): string {
+    return this.user?.photoURL || '../../../assets/images/sem_imagem_avatar.png';
   }
 
   notifySum() {
@@ -199,5 +210,16 @@ export class HomePage implements AfterViewInit {
         }, +delay);
       }
     });
+  }
+
+  async openPix() {
+    const pixCode = '00020126430014br.gov.bcb.pix0114+5581999999995204000053039865802BR5920NOME DO RECEBEDOR6009SAO PAULO62290525mensagem de exemplo6304ABCD';
+
+    try {
+      await OpenPix.open({ code: pixCode });
+      console.log('Intent enviada');
+    } catch (err) {
+      console.error('Erro ao abrir Pix:', err);
+    }
   }
 }

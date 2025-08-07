@@ -4,7 +4,6 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { map, take } from 'rxjs/operators';
 
-// Guard para verificar login
 export const isLoggedInGuard: CanActivateFn = () => {
   const auth = inject(AuthService);
   const router = inject(Router);
@@ -31,7 +30,7 @@ export const isAdminGuard: CanActivateFn = () => {
       if (user && user.role === 'Admin') {
         return true;
       }
-      router.navigateByUrl('/login');
+      router.navigateByUrl('/home');
       return false;
     })
   );

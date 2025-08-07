@@ -22,3 +22,6 @@ project(':capgo-capacitor-social-login').projectDir = new File('../node_modules/
 
 include ':codetrix-studio-capacitor-google-auth'
 project(':codetrix-studio-capacitor-google-auth').projectDir = new File('../node_modules/@codetrix-studio/capacitor-google-auth/android')
+
+include ':open-pix'
+project(':open-pix').projectDir = new File('../open-pix/android')

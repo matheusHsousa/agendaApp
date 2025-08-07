@@ -3,8 +3,9 @@
     <img id="headerImage" src="../../assets/images/igreja.png" />
 
     <ion-avatar class="photo-icon">
-      <img [src]="user?.photoURL || './../../../assets/images/sem_imagem_avatar.png'" alt="Foto de perfil" />
+      <img [src]="avatarUrl"/>
     </ion-avatar>
+
 
     <div class="sum-temp">
       <p>🌇 Horário do pôr do sol</p>
@@ -30,7 +31,7 @@
   </ion-card>
 
   <div>
-    <ion-card class="fade-in card-degrade1" (click)="goToAdmin()" #animado data-delay="0">
+    <ion-card class="fade-in card-degrade1" (click)="openPix()" #animado data-delay="0">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -41,7 +42,6 @@
       </ion-card-header>
     </ion-card>
 
-    <!-- Card 2 — Amarelo (Escola Sabatina) -->
     <ion-card class="fade-in card-degrade2" (click)="goToSabbathSchool()" #animado data-delay="100">
       <ion-card-header>
         <ion-card-title>
