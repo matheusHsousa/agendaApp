@@ -34,3 +34,9 @@ pdf-viewer {
 ::ng-deep .inner-scroll{
   overflow: hidden !important;
 }
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

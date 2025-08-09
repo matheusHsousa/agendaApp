@@ -5,7 +5,7 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { IonicModule } from '@ionic/angular';
 import { NavigationService } from 'src/app/services/navigate.service';
 import { GestureController, Gesture } from '@ionic/angular';
-
+import { LoadingService } from 'src/app/services/loading.service'; // importar o serviço
 
 @Component({
   selector: 'app-livro-viewer',
@@ -24,49 +24,46 @@ export class LeitorPdfComponent {
   constructor(
     private route: ActivatedRoute,
     private navigationService: NavigationService,
-    private gestureCtrl: GestureController
-  ) {
-    
-  }
+    private gestureCtrl: GestureController,
+    private loadingService: LoadingService // injetar
+  ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.pdfSrc = params['pdf'];
+      if (this.pdfSrc) {
+        this.loadingService.show(); // mostra o loading ao iniciar o carregamento
+      }
     });
+
     this.setResponsiveZoom();
     window.addEventListener('resize', () => this.setResponsiveZoom());
   }
 
   private setResponsiveZoom() {
-    const containerWidth = window.innerWidth; 
+    const containerWidth = window.innerWidth;
     const baseWidth = 680;
     this.pdfZoom = containerWidth / baseWidth;
   }
 
-
   ionViewWillEnter() {
     this.initSwipeGesture();
-
-    this.currentPage = parseInt(localStorage.getItem(`pdf-page-${this.pdfSrc}`) || '1')
-    if (this.pdfInstance) {
-    }
+    this.currentPage = parseInt(localStorage.getItem(`pdf-page-${this.pdfSrc}`) || '1');
   }
 
   private initSwipeGesture() {
     const content = document.querySelector('ion-content');
-
     if (!content) return;
 
     const gesture: Gesture = this.gestureCtrl.create({
       el: content,
       gestureName: 'swipe-pdf',
       onMove: ev => {
-        // Sensibilidade do gesto (pode ajustar)
         if (Math.abs(ev.deltaX) > 50) {
           if (ev.deltaX < 0) {
-            this.nextPage();  // deslizou para a esquerda
+            this.nextPage();
           } else {
-            this.prevPage();  // deslizou para a direita
+            this.prevPage();
           }
         }
       }
@@ -82,8 +79,8 @@ export class LeitorPdfComponent {
     const savedPage = localStorage.getItem(`pdf-page-${this.pdfSrc}`);
     this.currentPage = savedPage ? parseInt(savedPage, 10) : 1;
 
+    this.loadingService.hide();
   }
-
 
   nextPage() {
     if (this.currentPage < this.totalPages) {
@@ -104,7 +101,6 @@ export class LeitorPdfComponent {
       localStorage.setItem(`pdf-page-${this.pdfSrc}`, this.currentPage.toString());
     }
   }
-
 
   voltar() {
     this.navigationService.back();

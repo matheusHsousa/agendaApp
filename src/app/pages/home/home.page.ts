@@ -213,18 +213,39 @@ export class HomePage implements AfterViewInit {
   }
 
   async openPix() {
-    const pixCode = '00020126430014br.gov.bcb.pix0114+5581999999995204000053039865802BR5920NOME DO RECEBEDOR6009SAO PAULO62290525mensagem de exemplo6304ABCD';
+    const pixCode =
+      '00020126430014br.gov.bcb.pix0114+5581999999995204000053039865802BR5920NOME DO RECEBEDOR6009SAO PAULO62290525mensagem de exemplo6304ABCD';
 
-    try {
-      await OpenPix.open({ code: pixCode });
-      console.log('Intent enviada');
-    } catch (err) {
-      console.error('Erro ao abrir Pix:', err);
+    const isPwa =
+      window.matchMedia('(display-mode: standalone)').matches || // Android/Chrome
+      (window.navigator as any).standalone === true; // iOS Safari
+
+    if (isPwa) {
+      // Está rodando como PWA → abrir seletor de banco com link Pix
+      try {
+        const pixUrl = `br.gov.bcb.pix://${pixCode}`;
+        window.location.href = pixUrl; // força abertura do app de pagamento
+        console.log('Abrindo seletor de banco via PWA');
+      } catch (err) {
+        console.error('Erro ao abrir Pix no PWA:', err);
+        await navigator.clipboard.writeText(pixCode);
+        alert('Não foi possível abrir o Pix, código copiado para a área de transferência.');
+      }
+    } else {
+      // App nativo com plugin OpenPix
+      try {
+        await OpenPix.open({ code: pixCode });
+        console.log('Intent enviada');
+      } catch (err) {
+        console.error('Erro ao abrir Pix:', err);
+        await navigator.clipboard.writeText(pixCode);
+        alert('Não foi possível abrir o Pix, código copiado para a área de transferência.');
+      }
     }
   }
 
   abrirInstagram() {
-  window.open('https://www.instagram.com/adventistascidadedutra/', '_blank');
+    window.open('https://www.instagram.com/adventistascidadedutra/', '_blank');
   }
 
 }

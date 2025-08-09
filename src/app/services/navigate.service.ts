@@ -33,11 +33,8 @@ export class NavigationService {
   }
 
   back() {
-    // Só anima se a navegação anterior foi feita pelo `navigate()`
     if (this.wasNavigated && this.lastTab && this.lastTab !== this.currentTab) {
-      const currentIndex = this.tabOrder.indexOf(this.currentTab);
-      const lastIndex = this.tabOrder.indexOf(this.lastTab);
-      const direction = lastIndex > currentIndex ? 'left' : 'right';
+      const direction = 'left'; 
 
       this.animate(direction);
       this.currentTab = this.lastTab;
@@ -49,6 +46,7 @@ export class NavigationService {
       this.location.back();
     }, 300);
   }
+
 
   updateCurrentTab(tab: string) {
     this.currentTab = tab;
