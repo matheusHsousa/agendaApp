@@ -43,7 +43,10 @@ export class MeditacoesPage implements OnInit {
     }
   ];
 
-  swiperModules = [IonicSlides]; 
+  loadingIcons: boolean[] = [];
+  loadingLivros: boolean[] = [];
+
+  swiperModules = [IonicSlides];
 
   livros = [
     { titulo: 'A Ciencia do Bom Viver', img: '../../../assets/livros/cienciaDoBomViver.png', pdf: '../../../assets/livros/A-Ciencia-do-Bom-Viver.pdf' },
@@ -74,11 +77,20 @@ export class MeditacoesPage implements OnInit {
   currentPage = 1;
   totalPages = 0;
 
-
-
   constructor(private router: Router, private navigationService: NavigationService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.loadingIcons = new Array(this.icons.length).fill(true);
+    this.loadingLivros = new Array(this.livros.length).fill(true);
+  }
+
+  onImageLoad(type: 'icon' | 'livro', index: number) {
+    if (type === 'icon') {
+      this.loadingIcons[index] = false;
+    } else {
+      this.loadingLivros[index] = false;
+    }
+  }
 
   abrir(link: string) {
     this.router.navigate(['tabs/iframe-medi'], { queryParams: { link } });

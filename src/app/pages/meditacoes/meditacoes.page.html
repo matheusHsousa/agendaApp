@@ -9,16 +9,20 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content >
+<ion-content>
   <div class="section-container">
     <ion-list-header>
       <ion-label>Meditações Diárias</ion-label>
     </ion-list-header>
-    
+
     <swiper-container [modules]="swiperModules" slides-per-view="auto" space-between="15" free-mode="true">
-      <swiper-slide *ngFor="let icon of icons">
+      <swiper-slide *ngFor="let icon of icons; let i = index">
         <ion-card (click)="abrir(icon.link)" class="slide-card">
-          <img [src]="icon.img" [alt]="icon.label" class="slide-image">
+          <div class="image-wrapper">
+            <ion-spinner *ngIf="loadingIcons[i]" name="crescent"></ion-spinner>
+            <img [src]="icon.img" [alt]="icon.label" (load)="onImageLoad('icon', i)" class="slide-image"
+              [class.hidden]="loadingIcons[i]">
+          </div>
           <ion-card-header>
             <ion-card-title>{{icon.label}}</ion-card-title>
           </ion-card-header>
@@ -31,11 +35,15 @@
     <ion-list-header>
       <ion-label>Livros</ion-label>
     </ion-list-header>
-    
+
     <swiper-container [modules]="swiperModules" slides-per-view="auto" space-between="15" free-mode="true">
-      <swiper-slide *ngFor="let livro of livros">
+      <swiper-slide *ngFor="let livro of livros; let i = index">
         <ion-card (click)="abrirLivro(livro.pdf)" class="slide-card">
-          <img [src]="livro.img" [alt]="livro.titulo" class="slide-image">
+          <div class="image-wrapper">
+            <ion-spinner *ngIf="loadingLivros[i]" name="crescent"></ion-spinner>
+            <img [src]="livro.img" [alt]="livro.titulo" (load)="onImageLoad('livro', i)" class="slide-image"
+              [class.hidden]="loadingLivros[i]">
+          </div>
           <ion-card-header>
             <ion-card-title>{{livro.titulo}}</ion-card-title>
           </ion-card-header>
