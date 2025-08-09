@@ -1,0 +1,36 @@
+ion-content {
+  --padding-top: 0;   // Garante sem padding extra
+  --padding-bottom: 0;
+  height: 100%;
+}
+
+pdf-viewer {
+  height: 100%;
+  width: 100%;
+  display: block;
+
+}
+
+.pagination {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(248, 248, 248, 0.3);
+  padding: 0px;
+}
+
+:host ::ng-deep .ng2-pdf-viewer-container {
+  overflow-x: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+::ng-deep .inner-scroll{
+  overflow: hidden !important;
+}

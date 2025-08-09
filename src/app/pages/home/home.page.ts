@@ -225,6 +225,6 @@ export class HomePage implements AfterViewInit {
 
   abrirInstagram() {
   window.open('https://www.instagram.com/adventistascidadedutra/', '_blank');
-}
+  }
 
 }

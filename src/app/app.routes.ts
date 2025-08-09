@@ -4,12 +4,14 @@ import { HomePage } from './pages/home/home.page';
 import { isLoggedInGuard, isAdminGuard } from './guards/auth.guard';
 import { BibliaPage } from './pages/biblia/biblia.page';
 import { MeditacoesPage } from './pages/meditacoes/meditacoes.page';
+import { LeitorPdfComponent } from './pages/leitor-pdf/leitor-pdf.page';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  
+
   { path: 'login', component: LoginPage },
-  
+
   {
     path: 'tabs',
     loadComponent: () => import('./pages/tabs/tabs.page').then(m => m.TabsPage),
@@ -25,7 +27,7 @@ export const routes: Routes = [
         component: BibliaPage,
         canActivate: [isLoggedInGuard],
       },
-        {
+      {
         path: 'meditacoes',
         component: MeditacoesPage,
         canActivate: [isLoggedInGuard],
@@ -53,15 +55,25 @@ export const routes: Routes = [
       {
         path: 'sabbath-school',
         loadComponent: () => import('./pages/sabbath-school/sabbath-school.page').then(m => m.SabbathSchoolPage),
+        canActivate: [isLoggedInGuard],
       },
-      { path: '', redirectTo: 'home', pathMatch: 'full' }, 
-      { path: 'biblia', redirectTo: 'biblia', pathMatch: 'full' }, 
-      { path: 'meditacoes', redirectTo: 'meditacoes', pathMatch: 'full' }, 
+      {
+        path: 'iframe-medi',
+        loadComponent: () => import('./pages/iframe-medi/iframe-medi.page').then(m => m.IframeMediPage),
+        canActivate: [isLoggedInGuard],
+      },
+      {
+        path: 'livro-viewer',
+        loadComponent: () => import('./pages/leitor-pdf/leitor-pdf.page').then(m => m.LeitorPdfComponent),
+        canActivate: [isLoggedInGuard],
+      },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'biblia', redirectTo: 'biblia', pathMatch: 'full' },
+      { path: 'meditacoes', redirectTo: 'meditacoes', pathMatch: 'full' },
     ],
-  },  {
-    path: 'iframe-medi',
-    loadComponent: () => import('./pages/iframe-medi/iframe-medi.page').then( m => m.IframeMediPage)
   },
+
+
 
 
 ];

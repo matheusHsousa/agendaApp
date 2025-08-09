@@ -1,7 +1,7 @@
 {
   "functions": [
     {
-      "source": "functions",
+      "source": "push-functions",
       "codebase": "default",
       "ignore": [
         "node_modules",

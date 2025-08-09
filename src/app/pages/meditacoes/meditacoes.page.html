@@ -1,20 +1,46 @@
-<ion-content [fullscreen]="true">
-  <div class="content">
-    <ion-header collapse="condense">
-      <ion-toolbar>
-        <ion-title size="large">Meditações</ion-title>
-      </ion-toolbar>
-    </ion-header>
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Biblioteca</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
 
-    <ion-slides [options]="slideOpts">
-      <ion-slide>
-        <div class="icon-grid">
-          <div class="icon-slide" *ngFor="let item of icons" (click)="abrir(item.link)">
-            <img [src]="item.img" alt="{{ item.label }}" />
-            <p>{{ item.label }}</p>
-          </div>
-        </div>
-      </ion-slide>
-    </ion-slides>
+<ion-content >
+  <div class="section-container">
+    <ion-list-header>
+      <ion-label>Meditações Diárias</ion-label>
+    </ion-list-header>
+    
+    <swiper-container [modules]="swiperModules" slides-per-view="auto" space-between="15" free-mode="true">
+      <swiper-slide *ngFor="let icon of icons">
+        <ion-card (click)="abrir(icon.link)" class="slide-card">
+          <img [src]="icon.img" [alt]="icon.label" class="slide-image">
+          <ion-card-header>
+            <ion-card-title>{{icon.label}}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <div class="section-container">
+    <ion-list-header>
+      <ion-label>Livros</ion-label>
+    </ion-list-header>
+    
+    <swiper-container [modules]="swiperModules" slides-per-view="auto" space-between="15" free-mode="true">
+      <swiper-slide *ngFor="let livro of livros">
+        <ion-card (click)="abrirLivro(livro.pdf)" class="slide-card">
+          <img [src]="livro.img" [alt]="livro.titulo" class="slide-image">
+          <ion-card-header>
+            <ion-card-title>{{livro.titulo}}</ion-card-title>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
   </div>
 </ion-content>

@@ -1,47 +1,60 @@
-.icon-grid {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 16px;
+/* Estilos globais para o Swiper */
+swiper-container {
+  padding: 0 0 0 24px;
   width: 100%;
-  padding: 0 10px;
 }
 
-.content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.icon-arrow{
+    color: #2c5364;
 }
 
-.icon-slide {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  min-width: 80px;
+swiper-slide {
+  width: auto !important;
+  height: auto;
+}
 
-  img {
-    width: 80px;
-    height: 80px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
+/* Estilos para os cards */
+.slide-card {
+  width: 150px;
+  margin: 0;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  transition: transform 0.3s ease;
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  .slide-image {
+    width: 100%;
+    height: 120px;
     object-fit: cover;
-    margin-bottom: 8px;
-    transition: transform 0.3s ease;
+    border-radius: 12px 12px 0 0;
   }
-
-  p {
-    font-size: 14px;
-    color: var(--ion-color-primary);
-    font-weight: 600;
-    margin: 0;
+  
+  ion-card-header {
+    padding: 10px;
+    
+    ion-card-title {
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
+}
 
-  &:hover img {
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+.section-container {
+  margin-bottom: 25px;
+}
+
+ion-list-header {
+  padding-inline-start: 24px;
+  
+  ion-label {
+    margin-bottom: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
 }

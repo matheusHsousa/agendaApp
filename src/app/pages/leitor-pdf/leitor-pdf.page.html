@@ -1,0 +1,33 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Visualizador de Livro</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <pdf-viewer
+  [src]="pdfSrc"
+  [render-text]="true"
+  [show-all]="false"
+  [page]="currentPage"
+  [zoom]="pdfZoom"
+  (after-load-complete)="onPdfLoad($event)"
+  style="height: 100%; width: 100%; display: flex; align-items: center;">
+</pdf-viewer>
+
+</ion-content>
+
+<ion-footer>
+ 
+    <div class="pagination" style="text-align: center; width: 100%;">
+      <ion-button (click)="prevPage()" size="small" fill="outline">Anterior</ion-button>
+      <span>{{ currentPage }} / {{ totalPages }}</span>
+      <ion-button (click)="nextPage()" size="small" fill="outline">Próxima</ion-button>
+    </div>
+
+</ion-footer>
