@@ -232,7 +232,6 @@ export class HomePage implements AfterViewInit {
         alert('Não foi possível abrir o Pix, código copiado para a área de transferência.');
       }
     } else {
-      // App nativo com plugin OpenPix
       try {
         await OpenPix.open({ code: pixCode });
         console.log('Intent enviada');

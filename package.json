@@ -42,6 +42,7 @@
     "luxon": "^3.7.1",
     "moment": "^2.30.1",
     "ng2-pdf-viewer": "^10.4.0",
+    "onesignal-cordova-plugin": "^5.2.15",
     "open-pix": "file:open-pix",
     "pix-payload": "^1.0.4",
     "pix-utils": "^2.8.1",

@@ -19,8 +19,10 @@ dependencies {
     implementation project(':open-pix')
     implementation "com.google.android.gms:play-services-auth:15.0.1"
     implementation "com.google.android.gms:play-services-identity:15.0.1"
+    implementation "com.onesignal:OneSignal:5.1.35"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
 }
-
+apply from: "../../node_modules/onesignal-cordova-plugin/build-extras-onesignal.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()

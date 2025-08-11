@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { PdfViewerModule } from 'ng2-pdf-viewer';
@@ -20,25 +20,46 @@ export class LeitorPdfComponent {
   totalPages = 0;
   pdfZoom: number = 0.72;
   private pdfInstance: any;
+  @ViewChild('pdfContainer', { static: true }) pdfContainer!: ElementRef;
+
 
   constructor(
     private route: ActivatedRoute,
     private navigationService: NavigationService,
     private gestureCtrl: GestureController,
-    private loadingService: LoadingService // injetar
+    private loadingService: LoadingService
   ) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       this.pdfSrc = params['pdf'];
       if (this.pdfSrc) {
-        this.loadingService.show(); // mostra o loading ao iniciar o carregamento
+        this.loadingService.show();
       }
     });
 
     this.setResponsiveZoom();
     window.addEventListener('resize', () => this.setResponsiveZoom());
   }
+
+  ngAfterViewInit() {
+    const gesture: Gesture = this.gestureCtrl.create({
+      el: this.pdfContainer.nativeElement,
+      gestureName: 'swipe-pdf',
+      onMove: ev => {
+      },
+      onEnd: ev => {
+        const swipeThreshold = 50;
+        if (ev.deltaX > swipeThreshold) {
+          this.prevPage();
+        } else if (ev.deltaX < -swipeThreshold) {
+          this.nextPage();
+        }
+      }
+    });
+    gesture.enable(true);
+  }
+
 
   private setResponsiveZoom() {
     const containerWidth = window.innerWidth;
@@ -47,30 +68,9 @@ export class LeitorPdfComponent {
   }
 
   ionViewWillEnter() {
-    this.initSwipeGesture();
     this.currentPage = parseInt(localStorage.getItem(`pdf-page-${this.pdfSrc}`) || '1');
   }
 
-  private initSwipeGesture() {
-    const content = document.querySelector('ion-content');
-    if (!content) return;
-
-    const gesture: Gesture = this.gestureCtrl.create({
-      el: content,
-      gestureName: 'swipe-pdf',
-      onMove: ev => {
-        if (Math.abs(ev.deltaX) > 50) {
-          if (ev.deltaX < 0) {
-            this.nextPage();
-          } else {
-            this.prevPage();
-          }
-        }
-      }
-    });
-
-    gesture.enable();
-  }
 
   onPdfLoad(pdf: any) {
     this.pdfInstance = pdf;

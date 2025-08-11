@@ -14,7 +14,8 @@ import {
   chevronForwardOutline,
   people,
   logoGoogle,
-  bookmarkOutline 
+  bookmarkOutline,
+  alarm 
 } from 'ionicons/icons';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Capacitor } from '@capacitor/core';
@@ -33,8 +34,8 @@ addIcons({
   'chevron-forward-outline': chevronForwardOutline,
   'people': people, 
   'logo-google': logoGoogle,
-  'bookmark-outline' : bookmarkOutline
-
+  'bookmark-outline' : bookmarkOutline,
+  'alarm' : alarm,
 });
 
 if (Capacitor.isNativePlatform()) {

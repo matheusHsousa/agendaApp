@@ -175,7 +175,8 @@ ion-card {
 .card-degrade1,
 .card-degrade2,
 .card-degrade3,
-.card-degrade4 {
+.card-degrade4,
+.card-degrade5 {
   position: relative;
   overflow: hidden;
   z-index: 0;
@@ -218,9 +219,15 @@ ion-icon {
   /* rosa suave */
 }
 
+.card-degrade5 {
+  background: linear-gradient(to right, #f06292, #f48fb1);
+  /* rosa suave */
+}
+
 .card-degrade1::after,
 .card-degrade2::after,
 .card-degrade3::after,
+.card-degrade4::after, 
 .card-degrade4::after {
   content: "";
   position: absolute;
@@ -268,9 +275,14 @@ ion-card:hover::after {
   background-image: url('../../../assets/images/redes.webp');
 }
 
+.card-degrade5::after {
+  background-image: url('../../../assets/images/redes.webp');
+}
+
 .card-degrade1,
 .card-degrade2,
 .card-degrade3,
-.card-degrade4 {
+.card-degrade4,
+.card-degrade5 {
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 }
