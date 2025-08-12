@@ -56,7 +56,6 @@ export class EscalaPage implements OnInit {
 
     this.subscription = this.escalaService.listarEscalas().subscribe({
       next: (dados: any) => {
-        console.log(dados);
 
         // Filtra só escalas a partir de hoje
         const futuras = dados.filter((escala: any) => {

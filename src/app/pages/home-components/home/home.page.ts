@@ -225,7 +225,6 @@ export class HomePage implements AfterViewInit {
       try {
         const pixUrl = `br.gov.bcb.pix://${pixCode}`;
         window.location.href = pixUrl; // força abertura do app de pagamento
-        console.log('Abrindo seletor de banco via PWA');
       } catch (err) {
         console.error('Erro ao abrir Pix no PWA:', err);
         await navigator.clipboard.writeText(pixCode);
@@ -234,7 +233,6 @@ export class HomePage implements AfterViewInit {
     } else {
       try {
         await OpenPix.open({ code: pixCode });
-        console.log('Intent enviada');
       } catch (err) {
         console.error('Erro ao abrir Pix:', err);
         await navigator.clipboard.writeText(pixCode);

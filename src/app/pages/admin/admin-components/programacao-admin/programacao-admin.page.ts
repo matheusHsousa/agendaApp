@@ -84,7 +84,6 @@ export class ProgramacaoAdminPage implements OnInit {
               return (ha * 60 + ma) - (hb * 60 + mb);
             })
         }));
-        console.log(this.cronogramas);
       },
       error: (err) => console.error('Erro ao carregar cronogramas', err)
     });
@@ -244,7 +243,6 @@ export class ProgramacaoAdminPage implements OnInit {
       cronograma.id,
       { atividades: cronograma.atividades }
     ).then(() => {
-      console.log('Cronograma atualizado com sucesso!');
       this.carregarCronogramas();
     }).catch(err => console.error('Erro ao salvar edição:', err));
   }

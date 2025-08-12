@@ -39,11 +39,9 @@ export class AppComponent implements OnInit {
       OneSignal.setAppId('4bc30d9a-f6d3-4b56-b1ed-1931a2a55960');
 
       OneSignal.promptForPushNotificationsWithUserResponse((response: any) => {
-        console.log('Permissão para push:', response);
       });
 
       OneSignal.addEventListener('notificationOpened', (jsonData: any) => {
-        console.log('Notificação aberta:', jsonData);
       });
     }
   }

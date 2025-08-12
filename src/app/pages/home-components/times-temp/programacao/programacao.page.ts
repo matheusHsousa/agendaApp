@@ -41,7 +41,6 @@ export class ProgramacaoPage implements OnInit {
   ngOnInit() {
     this.cronogramaService.listarCronogramas().subscribe(data => {
       this.filtrarProgramacoesDoDia(data);
-      console.log(this.programacoesPorPeriodo);
     });
   }
 

@@ -95,7 +95,6 @@ export class CronogramaService {
 
   public calcularHorarios(horaInicio: string, atividades: any[]) {
     console.group('[Service] calcularHorarios');
-    console.log('Input:', { horaInicio, atividades: JSON.parse(JSON.stringify(atividades)) });
 
     let [hora, minuto] = horaInicio.split(':').map(Number);
     const lista = [];
@@ -113,11 +112,8 @@ export class CronogramaService {
         hora++;
       }
 
-      console.log(`Atividade ${atv.ordem} -> Horário: ${horarioFormatado} | Próximo: ${hora}:${minuto}`);
     }
 
-    console.log('Resultado:', JSON.parse(JSON.stringify(lista)));
-    console.groupEnd();
     return lista;
   }
 
