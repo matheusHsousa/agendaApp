@@ -2,7 +2,7 @@ import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { MinistryService } from './../../services/ministries.service';
+import { MinistryService } from './../../../../services/ministries.service';
 import { Subscription } from 'rxjs';
 import { IonicModule } from '@ionic/angular';
 import { NavigationService } from 'src/app/services/navigate.service';

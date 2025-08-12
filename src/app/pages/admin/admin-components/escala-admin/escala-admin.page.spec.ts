@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HubCronogramaPage } from './hub-cronograma.page';
+import { EscalaAdminPage } from './escala-admin.page';
 
-describe('HubCronogramaPage', () => {
-  let component: HubCronogramaPage;
-  let fixture: ComponentFixture<HubCronogramaPage>;
+describe('EscalaAdminPage', () => {
+  let component: EscalaAdminPage;
+  let fixture: ComponentFixture<EscalaAdminPage>;
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HubCronogramaPage);
+    fixture = TestBed.createComponent(EscalaAdminPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

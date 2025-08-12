@@ -220,7 +220,7 @@ ion-icon {
 }
 
 .card-degrade5 {
-  background: linear-gradient(to right, #f06292, #f48fb1);
+  background: linear-gradient(to right, #26b449, #0fbb6a);
   /* rosa suave */
 }
 
@@ -228,7 +228,7 @@ ion-icon {
 .card-degrade2::after,
 .card-degrade3::after,
 .card-degrade4::after, 
-.card-degrade4::after {
+.card-degrade5::after {
   content: "";
   position: absolute;
   bottom: 0;
@@ -236,7 +236,6 @@ ion-icon {
   left: 160px;
   width: 100%;
   height: 100%;
-  background-image: url('../../../assets/images/dizimo.jpg');
   /* Troque conforme o card */
   background-repeat: no-repeat;
   background-position: right;
@@ -260,24 +259,25 @@ ion-card:hover::after {
 
 /* Imagens específicas */
 .card-degrade1::after {
-  background-image: url('../../../assets/images/dizimo.jpg');
+  background-image: url('../../../../assets/images/dizimo.jpg');
 }
 
 .card-degrade2::after {
-  background-image: url('../../../assets/images/es.jpg');
+  background-image: url('../../../../assets/images/es.jpg');
 }
 
 .card-degrade3::after {
-  background-image: url('../../../assets/images/igreja.png');
-}
-
-.card-degrade4::after {
-  background-image: url('../../../assets/images/redes.webp');
+  background-image: url('../../../../assets/images/igreja.png');
 }
 
 .card-degrade5::after {
-  background-image: url('../../../assets/images/redes.webp');
+  background-image: url('../../../../assets/images/prancheta.png');
 }
+
+.card-degrade4::after {
+  background-image: url('../../../../assets/images/redes.webp');
+}
+
 
 .card-degrade1,
 .card-degrade2,

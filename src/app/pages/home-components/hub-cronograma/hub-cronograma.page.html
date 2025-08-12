@@ -1,0 +1,24 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Informações do dia</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item button (click)="navegar('/tabs/programacao')">
+      <ion-icon slot="start" name="calendar"></ion-icon>
+      <ion-label>Programação</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="navegar('/tabs/escala')">
+      <ion-icon slot="start" name="clipboard"></ion-icon>
+      <ion-label>Escalas</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

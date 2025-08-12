@@ -1,0 +1,54 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Cronograma</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="programacoesPorPeriodo.length > 0" class="ion-padding">
+
+  <!-- Mostra a data do grupo -->
+  <h2 class="data-titulo">
+    {{ programacoesPorPeriodo[0].items[0].dataFormatada || (programacoesPorPeriodo[0].items[0].data | date:'dd/MM/yyyy') }}
+  </h2>
+
+  <ion-accordion-group>
+    <ion-accordion *ngFor="let grupo of programacoesPorPeriodo" value="{{grupo.periodo}}">
+      <ion-item slot="header" color="light" detail="false" lines="full">
+        <ion-label>
+          <h3>{{ grupo.periodo }}</h3>
+        </ion-label>
+      </ion-item>
+
+      <div class="ion-padding" slot="content">
+        <div lines="inset">
+          <div *ngFor="let cronograma of grupo.items" detail="false" class="cronograma-item">
+            <ion-label>
+              <h4><strong>Início:</strong> {{ cronograma.horaInicio }}</h4>
+              <ion-list>
+                <ion-item *ngFor="let atividade of cronograma.atividades" detail="false" class="atividade-item">
+                  <ion-label>
+                    <h5><strong>{{ atividade.cronograma }}</strong> - {{ atividade.horario }}</h5>
+                    <p><strong>Responsável:</strong> {{ atividade.responsavel }}</p>
+                    <p><strong>Duração:</strong> {{ atividade.duracao }} min</p>
+                    <p><strong>Linha frente:</strong> {{ atividade.linhaFrente }}</p>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </ion-label>
+          </div>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+</ion-content>
+
+<ion-content *ngIf="programacoesPorPeriodo.length === 0" class="ion-padding">
+  <p>Não há programação disponível.</p>
+</ion-content>
+

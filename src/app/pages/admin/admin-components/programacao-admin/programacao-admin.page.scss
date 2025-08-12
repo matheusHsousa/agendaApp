@@ -1,0 +1,37 @@
+/* programacao-admin.page.scss */
+ion-reorder {
+  margin-inline-end: 0;
+}
+
+ion-item {
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+}
+
+ion-label h2 {
+  font-weight: 500;
+}
+
+ion-label p {
+  margin: 4px 0;
+  font-size: 0.9em;
+  color: var(--ion-color-medium);
+}
+
+ion-accordion {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.invalido {
+  --highlight-color-invalid: var(--ion-color-danger);
+  --border-color: var(--ion-color-danger);
+}
+
+ion-note {
+  font-size: 0.8rem;
+  margin-top: 4px;
+  display: block;
+}

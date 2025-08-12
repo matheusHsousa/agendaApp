@@ -1,0 +1,129 @@
+<!-- programacao-admin.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Programação - Admin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-segment [(ngModel)]="tabSelecionada" color="primary">
+    <ion-segment-button value="criar">
+      Criar
+    </ion-segment-button>
+    <ion-segment-button value="editar">
+      Editar
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="tabSelecionada === 'criar'" class="ion-padding">
+    <h2>Criar Cronograma</h2>
+    <ion-item>
+      <ion-label position="stacked">Data</ion-label>
+      <ion-datetime [(ngModel)]="data" presentation="date"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Hora de Início</ion-label>
+      <ion-input [(ngModel)]="horaInicio" type="time" (ionChange)="validarHorarioInicio()"
+        [class.invalido]="horarioInvalido"></ion-input>
+      <ion-note *ngIf="horarioInvalido" color="danger">
+        Horário conflita com atividades existentes
+      </ion-note>
+    </ion-item>
+
+    <ion-list>
+      <ion-item *ngFor="let atv of atividades; let i = index">
+        <ion-label position="stacked">Atividade {{ i + 1 }}</ion-label>
+        <ion-input placeholder="Descrição" [(ngModel)]="atv.cronograma"></ion-input>
+        <ion-input placeholder="Linha de frente" [(ngModel)]="atv.linhaFrente"></ion-input>
+        <ion-input placeholder="Responsável" [(ngModel)]="atv.responsavel"></ion-input>
+        <ion-input placeholder="Duração (min)" type="number" [(ngModel)]="atv.duracao"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" (click)="adicionarAtividade()">Adicionar Atividade</ion-button>
+    <ion-button expand="block" color="success" (click)="salvar()">Salvar Cronograma</ion-button>
+  </div>
+
+  <ion-accordion-group *ngIf="tabSelecionada != 'criar'">
+    <ion-accordion *ngFor="let cronograma of cronogramas; trackBy: trackById" [value]="cronograma.data">
+      <ion-item slot="header">
+        <ion-label>{{ formatarDataComPeriodo(cronograma.data, cronograma.horaInicio) }}</ion-label>
+      </ion-item>
+
+      <div class="ion-padding" slot="content">
+        <ion-reorder-group [disabled]="false" (ionItemReorder)="handleReorder($event, cronograma)">
+          <ion-item *ngFor="let atv of cronograma.atividades; let i = index; trackBy: trackByIndex">
+            <ion-label>
+              <div *ngIf="!atv.editando">
+                <h2>{{ atv.horario }} — {{ atv.cronograma }}</h2>
+                <p><strong>Linha de frente:</strong> {{ atv.linhaFrente || '-' }}</p>
+                <p><strong>Responsável:</strong> {{ atv.responsavel || '-' }}</p>
+                <p><strong>Duração:</strong> {{ atv.duracao }} minutos</p>
+              </div>
+
+              <div *ngIf="atv.editando" class="edit-form">
+                <ion-item>
+                  <ion-label position="stacked">Descrição</ion-label>
+                  <ion-input [(ngModel)]="atv.cronograma"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Linha de frente</ion-label>
+                  <ion-input [(ngModel)]="atv.linhaFrente"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Responsável</ion-label>
+                  <ion-input [(ngModel)]="atv.responsavel"></ion-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Duração (min)</ion-label>
+                  <ion-input type="number" [(ngModel)]="atv.duracao"></ion-input>
+                </ion-item>
+              </div>
+            </ion-label>
+
+            <div slot="end" class="actions">
+              <div *ngIf="!atv.editando" style="display: flex;">
+                <ion-button fill="clear" color="primary" size="small" (click)="ativarEdicao(atv)">
+                  <ion-icon name="create"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="danger" size="small" (click)="confirmarRemoverAtividade(cronograma, i)">
+                  <ion-icon name="trash"></ion-icon>
+                </ion-button>
+                <ion-reorder></ion-reorder>
+              </div>
+
+              <div *ngIf="atv.editando">
+                <ion-button fill="clear" color="success" size="small" (click)="salvarEdicaoAtividade(cronograma, atv)">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                </ion-button>
+                <ion-button fill="clear" color="medium" size="small" (click)="cancelarEdicao(atv)">
+                  <ion-icon name="close-outline"></ion-icon>
+                </ion-button>
+              </div>
+
+            </div>
+          </ion-item>
+        </ion-reorder-group>
+
+        <ion-button color="primary" expand="block" (click)="salvarEdicao(cronograma)" style="margin-top: 10px;">
+          Salvar Alterações
+        </ion-button>
+
+        <ion-button color="tertiary" expand="block" (click)="copiarParaCriar(cronograma)" style="margin-top: 10px;">
+          <ion-icon name="copy" slot="start"></ion-icon>
+          Adicionar mais atividades a este dia
+        </ion-button>
+        <ion-button color="danger" expand="block" (click)="confirmarRemoverCronograma(cronograma)"
+          style="margin-top: 10px;">
+          <ion-icon name="trash" slot="start"></ion-icon>
+          Excluir Cronograma
+        </ion-button>
+
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+</ion-content>

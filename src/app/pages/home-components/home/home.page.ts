@@ -6,7 +6,7 @@ import {
   ViewChildren
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { ScheduleService } from 'src/app/services/schedule.service';
 import moment from 'moment';
@@ -247,4 +247,8 @@ export class HomePage implements AfterViewInit {
     window.open('https://www.instagram.com/adventistascidadedutra/', '_blank');
   }
 
+
+  goToTimeLine() {
+    this.router.navigate(['tabs/hub-cronograma']);
+  }
 }

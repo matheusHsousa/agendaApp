@@ -15,7 +15,10 @@ import {
   people,
   logoGoogle,
   bookmarkOutline,
-  alarm 
+  alarm,
+  create,
+  trash,
+  clipboard 
 } from 'ionicons/icons';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Capacitor } from '@capacitor/core';
@@ -36,6 +39,9 @@ addIcons({
   'logo-google': logoGoogle,
   'bookmark-outline' : bookmarkOutline,
   'alarm' : alarm,
+  'create' : create,
+  'trash' : trash,
+  'clipboard' : clipboard
 });
 
 if (Capacitor.isNativePlatform()) {

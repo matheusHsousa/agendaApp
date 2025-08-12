@@ -33,7 +33,7 @@ export class MinistryService {
         collectionData(this.collectionRef, { idField: 'id' }).subscribe({
           next: (data) => {
             subscriber.next(data);
-            this.loadingService.hide(); // Oculta após o primeiro sucesso
+            this.loadingService.hide();
           },
           error: (err) => {
             this.loadingService.hide();
