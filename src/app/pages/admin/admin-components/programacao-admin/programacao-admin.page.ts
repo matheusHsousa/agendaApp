@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, QueryList, ViewChildren, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -8,17 +8,20 @@ import {
   IonToolbar,
   IonSegment,
   IonSegmentButton,
-  IonList,
+  IonCardHeader,
   IonItem,
   IonLabel,
   IonButton,
   IonInput,
   IonDatetime,
   IonReorder,
-  IonReorderGroup, IonAccordionGroup, IonAccordion, IonIcon, IonNote
-} from '@ionic/angular/standalone';
+  IonCardTitle,
+  IonCardContent,
+  IonReorderGroup, IonAccordionGroup, IonAccordion, IonIcon, IonNote, IonCard, IonText } from '@ionic/angular/standalone';
 import { CronogramaService } from 'src/app/services/cronograma.service';
 import { AlertController } from '@ionic/angular/standalone';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 
 @Component({
@@ -26,7 +29,7 @@ import { AlertController } from '@ionic/angular/standalone';
   templateUrl: './programacao-admin.page.html',
   styleUrls: ['./programacao-admin.page.scss'],
   standalone: true,
-  imports: [IonNote, IonIcon, IonAccordion, IonAccordionGroup,
+  imports: [IonText, IonCard, IonNote, IonIcon, IonAccordion, IonAccordionGroup,
     CommonModule,
     FormsModule,
     IonContent,
@@ -35,20 +38,25 @@ import { AlertController } from '@ionic/angular/standalone';
     IonToolbar,
     IonSegment,
     IonSegmentButton,
-    IonList,
     IonItem,
     IonLabel,
     IonButton,
     IonInput,
     IonDatetime,
     IonReorder,
-    IonReorderGroup
+    IonReorderGroup,
+    IonCardHeader,
+    IonCardContent,
+    ReactiveFormsModule,
+    IonCardTitle,
   ]
 })
 export class ProgramacaoAdminPage implements OnInit {
   tabSelecionada = 'criar';
   horarioInvalido = false;
-
+  camposTocados: Record<string, boolean> = {};
+  atividadesTocadas: Record<number, Record<string, boolean>> = {};
+  @ViewChild(IonContent) ionContent!: IonContent;
 
   data: string = '';
   horaInicio: string = '';
@@ -62,7 +70,8 @@ export class ProgramacaoAdminPage implements OnInit {
   constructor(
     private cronogramaService: CronogramaService,
     private cdr: ChangeDetectorRef,
-    private alertController: AlertController,) { }
+    private alertController: AlertController,
+  ) { }
 
   ngOnInit() {
     this.carregarCronogramas();
@@ -92,7 +101,20 @@ export class ProgramacaoAdminPage implements OnInit {
   adicionarAtividade() {
     const novaOrdem = this.atividades.length;
     this.atividades.push({ cronograma: '', linhaFrente: '', responsavel: '', duracao: 5, ordem: novaOrdem });
+
+    setTimeout(() => {
+      this.ionContent.scrollToBottom(600);
+    });
   }
+
+
+  removerAtividadeCriada(index: number) {
+    if (index === 0) {
+      return;
+    }
+    this.atividades.splice(index, 1);
+  }
+
 
   async salvar() {
     this.atividades = this.atividades.map((atv, i) => ({ ...atv, ordem: i }));
@@ -371,6 +393,52 @@ export class ProgramacaoAdminPage implements OnInit {
     });
 
     await alert.present();
+  }
+
+
+  formularioValido(): boolean {
+    if (!this.data || !this.horaInicio) {
+      return false;
+    }
+
+    return this.atividades.every(atv =>
+      atv.cronograma?.trim() &&
+      atv.linhaFrente?.trim() &&
+      atv.responsavel?.trim() &&
+      Number(atv.duracao) > 0
+    );
+  }
+
+  campoInvalido(campo: string): boolean {
+    if (!this.camposTocados[campo]) return false;
+
+    if (campo === 'data') {
+      return !this.data;
+    }
+    if (campo === 'horaInicio') {
+      return !this.horaInicio;
+    }
+    return false;
+  }
+
+  campoInvalidoAtividade(atividade: any, campo: string, index: number): boolean {
+    if (!this.atividadesTocadas[index]?.[campo]) return false;
+
+    if (campo === 'duracao') {
+      return !(atividade.duracao && Number(atividade.duracao) > 0);
+    }
+    return !atividade[campo] || !atividade[campo].trim();
+  }
+
+  marcarTocado(campo: string) {
+    this.camposTocados[campo] = true;
+  }
+
+  marcarTocadoAtividade(index: number, campo: string) {
+    if (!this.atividadesTocadas[index]) {
+      this.atividadesTocadas[index] = {};
+    }
+    this.atividadesTocadas[index][campo] = true;
   }
 
 }

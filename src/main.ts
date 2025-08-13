@@ -18,7 +18,8 @@ import {
   alarm,
   create,
   trash,
-  clipboard 
+  clipboard,
+  add
 } from 'ionicons/icons';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { Capacitor } from '@capacitor/core';
@@ -41,7 +42,8 @@ addIcons({
   'alarm' : alarm,
   'create' : create,
   'trash' : trash,
-  'clipboard' : clipboard
+  'clipboard' : clipboard,
+  'add' : add
 });
 
 if (Capacitor.isNativePlatform()) {

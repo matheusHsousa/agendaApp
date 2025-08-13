@@ -35,3 +35,48 @@ ion-note {
   margin-top: 4px;
   display: block;
 }
+
+ion-card {
+  margin: 0;
+}
+
+::ng-deep .input-wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.create-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.title-head-card {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  ion-icon {
+    font-size: 25px;
+  }
+}
+
+.fixed-bottom-button {
+  position: sticky;
+  bottom: 0;
+  padding: 0px 16px 16px;
+  z-index: 10;
+  color: #0f2027;
+
+  :host(.button-solid.ion-color) .button-native {
+    color: red;
+  }
+  ion-button {
+    --border-radius: 50px;
+    height: 56px;
+    width: 56px;
+    margin: 0 auto;
+  }
+}
+
+

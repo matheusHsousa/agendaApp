@@ -76,3 +76,8 @@ ion-router-outlet.slide-right {
 html, body {
   height: 100%;
 }
+
+ion-button.button-solid {
+  --background: #203a43; /* cor desejada */
+  --color: #fff;         /* cor do texto */
+}
