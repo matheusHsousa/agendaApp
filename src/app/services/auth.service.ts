@@ -52,7 +52,6 @@ export class AuthService {
       } else {
         this.currentUserSubject.next(null);
         this.clearCachedUser();
-        this.router.navigateByUrl('/login');
       }
     });
   }

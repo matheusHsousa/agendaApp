@@ -17,11 +17,12 @@ import {
   IonReorder,
   IonCardTitle,
   IonCardContent,
-  IonReorderGroup, IonAccordionGroup, IonAccordion, IonIcon, IonNote, IonCard, IonText } from '@ionic/angular/standalone';
+  IonReorderGroup, IonAccordionGroup, IonAccordion, IonIcon, IonNote, IonCard, IonText
+} from '@ionic/angular/standalone';
 import { CronogramaService } from 'src/app/services/cronograma.service';
 import { AlertController } from '@ionic/angular/standalone';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { NavigationService } from 'src/app/services/navigate.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   templateUrl: './programacao-admin.page.html',
   styleUrls: ['./programacao-admin.page.scss'],
   standalone: true,
-  imports: [IonText, IonCard, IonNote, IonIcon, IonAccordion, IonAccordionGroup,
+  imports: [IonCard, IonNote, IonIcon, IonAccordion, IonAccordionGroup,
     CommonModule,
     FormsModule,
     IonContent,
@@ -67,10 +68,65 @@ export class ProgramacaoAdminPage implements OnInit {
   cronogramas: any[] = [];
   extendendoCronogramaId: string | null = null;
 
+  modeloSelecionado: string = 'personalizado';
+
+  MODELOS_PADRAO = {
+    sabado: {
+      nome: 'Sábado',
+      atividades: [
+        { cronograma: 'Boas Vindas', linhaFrente: 'Vicente', responsavel: 'Juliano', duracao: 1 },
+        { cronograma: 'Hino Inicial [N.H.A. 375 - "Canção da Vida"]', linhaFrente: 'Equipe de Louvor', responsavel: 'Juliano', duracao: 4 },
+        { cronograma: 'Oração Inicial', linhaFrente: 'Patrícia', responsavel: 'Juliano', duracao: 1 },
+        { cronograma: 'Informativo Mundial das Missões', linhaFrente: 'Vídeo', responsavel: 'Juliano', duracao: 4 },
+        { cronograma: 'Mensagem Musical', linhaFrente: 'Wagner', responsavel: 'Juliano', duracao: 5 },
+        { cronograma: 'Introdução ao Estudo e Divisão das Classes', linhaFrente: 'Vicente', responsavel: 'Juliano', duracao: 46 },
+        { cronograma: 'Encerramento + Oração', linhaFrente: 'Nalva', responsavel: 'Juliano', duracao: 1 },
+        { cronograma: 'Mensagem Musical', linhaFrente: 'Wagner', responsavel: 'Juliano', duracao: 5 },
+        { cronograma: 'Hino Final [N.H.A. 69 - "Obrigado bom Pai"]', linhaFrente: 'Equipe de Louvor', responsavel: 'Juliano', duracao: 4 },
+        { cronograma: 'Oração Final', linhaFrente: 'Ivete', responsavel: 'Juliano', duracao: 1 },
+        { cronograma: 'Anúncios', linhaFrente: 'Ivo', responsavel: 'Juliano', duracao: 5 },
+        { cronograma: 'Minuto Missionário', linhaFrente: 'Roberto', responsavel: 'Juliano', duracao: 2 },
+        { cronograma: 'Recolta 2025', linhaFrente: 'Ivoninha/Valter', responsavel: 'Juliano', duracao: 2 },
+        { cronograma: 'Boas Vindas', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 1 },
+        { cronograma: 'Hino Introdutório [N.H.A. 564 - Vamos Adorar]', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 4 },
+        { cronograma: 'Oração Inicial', linhaFrente: 'Pr. Hélio Porto', responsavel: 'Vicente/Solange', duracao: 1 },
+        { cronograma: 'Adoração Infantil', linhaFrente: 'Aline', responsavel: 'Vicente/Solange', duracao: 14 },
+        { cronograma: 'Momento do Ofertório', linhaFrente: 'Vídeo (Provai e Vede)', responsavel: 'Vicente/Solange', duracao: 5 },
+        { cronograma: 'Música Ofertório [Oferta Maior]', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 4 },
+        { cronograma: 'Mensagem Musical', linhaFrente: 'Wagner', responsavel: 'Vicente/Solange', duracao: 5 },
+        { cronograma: 'Momento de Louvor [N.H.A. 362 - "O Melhor Lugar do Mundo"]', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 10 },
+        { cronograma: 'Momento de Louvor [N.H.A. 358 - "Só Com Teu Deus"]', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 10 },
+        { cronograma: 'Oração Intercessória', linhaFrente: 'Ancionato', responsavel: 'Vicente/Solange', duracao: 3 },
+        { cronograma: 'Sermão', linhaFrente: 'Pr. Hélio Porto', responsavel: 'Vicente/Solange', duracao: 40 },
+        { cronograma: 'Hino Final [N.H.A. 486 - "Até Então"]', linhaFrente: 'Equipe de Louvor', responsavel: 'Vicente/Solange', duracao: 4 },
+        { cronograma: 'Oração Final', linhaFrente: 'Pr. Hélio Porto', responsavel: 'Vicente/Solange', duracao: 2 },
+        { cronograma: 'Hino Despedida [N.H.A. 592 - Ao Sair Deste Santo Lugar]', linhaFrente: 'Equipe de Louvor [Nos Braços de Jesus]', responsavel: 'Vicente/Solange', duracao: 4 },
+        { cronograma: 'Saída Organizada pelos Diáconos', linhaFrente: '-', responsavel: '-', duracao: 1 }
+      ]
+    },
+    domingo: {
+      nome: 'Domingo',
+      atividades: [
+        { cronograma: '235 - Somos Teus, Senhor (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 },
+        { cronograma: '362 - O Melhor Lugar do Mundo (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 },
+        { cronograma: '240 -  Brilhar por Ti - (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 }
+      ]
+    },
+    quarta: {
+      nome: 'Quarta-feira',
+      atividades: [
+        { cronograma: '235 - Somos Teus, Senhor (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 },
+        { cronograma: '362 - O Melhor Lugar do Mundo (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 },
+        { cronograma: '240 -  Brilhar por Ti - (NHA)', linhaFrente: 'Equipe de Louvor: André, Viviane, Thiago', responsavel: 'Líder de Regência: Viviane', duracao: 5 }
+      ]
+    }
+  };
+
   constructor(
     private cronogramaService: CronogramaService,
     private cdr: ChangeDetectorRef,
     private alertController: AlertController,
+    private navigationService: NavigationService
   ) { }
 
   ngOnInit() {
@@ -98,6 +154,40 @@ export class ProgramacaoAdminPage implements OnInit {
     });
   }
 
+  voltar() {
+    this.navigationService.back();
+  }
+
+  aplicarModelo() {
+    if (this.modeloSelecionado === 'personalizado') {
+      return;
+    }
+
+    const modelo = this.MODELOS_PADRAO[this.modeloSelecionado as keyof typeof this.MODELOS_PADRAO];
+
+    this.atividades = [];
+
+    modelo.atividades.forEach((atv, index) => {
+      this.atividades.push({
+        ...atv,
+        ordem: index
+      });
+    });
+
+    this.horaInicio = this.modeloSelecionado === 'sabado' ? '09:00' :
+      this.modeloSelecionado === 'domingo' ? '19:00' : '20:00';
+
+    this.camposTocados['horaInicio'] = true;
+    this.atividades.forEach((_, index) => {
+      this.atividadesTocadas[index] = {
+        cronograma: true,
+        linhaFrente: true,
+        responsavel: true,
+        duracao: true
+      };
+    });
+  }
+
   adicionarAtividade() {
     const novaOrdem = this.atividades.length;
     this.atividades.push({ cronograma: '', linhaFrente: '', responsavel: '', duracao: 5, ordem: novaOrdem });
@@ -109,10 +199,15 @@ export class ProgramacaoAdminPage implements OnInit {
 
 
   removerAtividadeCriada(index: number) {
-    if (index === 0) {
+    if (index === 0 && this.atividades.length === 1) {
       return;
     }
+
     this.atividades.splice(index, 1);
+
+    this.atividades.forEach((atv, i) => {
+      atv.ordem = i;
+    });
   }
 
 
@@ -439,6 +534,42 @@ export class ProgramacaoAdminPage implements OnInit {
       this.atividadesTocadas[index] = {};
     }
     this.atividadesTocadas[index][campo] = true;
+  }
+
+  adicionarAtividadeNoMeio(index: number) {
+    const novaOrdem = this.atividades.length > 0 ?
+      Math.max(...this.atividades.map(a => a.ordem)) + 1 : 0;
+
+    this.atividades.splice(index, 0, {
+      cronograma: '',
+      linhaFrente: '',
+      responsavel: '',
+      duracao: 5,
+      ordem: novaOrdem
+    });
+
+    this.atividades.forEach((atv, i) => {
+      atv.ordem = i;
+    });
+
+    setTimeout(() => {
+      const cards = document.querySelectorAll('ion-card.activity-card');
+
+      if (cards.length > index) {
+        const newCard = cards[index];
+
+        newCard.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: 'nearest'
+        });
+
+        newCard.classList.add('highlight-new');
+        setTimeout(() => {
+          newCard.classList.remove('highlight-new');
+        }, 500);
+      }
+    }, 300);
   }
 
 }

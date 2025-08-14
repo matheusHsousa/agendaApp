@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   IonContent,
   IonList,
@@ -18,15 +18,16 @@ import {
   IonSegment,
   IonSegmentButton,
   IonAccordionGroup,
-  IonAccordion
+  IonAccordion,
+  IonText
 } from '@ionic/angular/standalone';
 import { NavigationService } from 'src/app/services/navigate.service';
 import { MinistryService } from 'src/app/services/ministries.service';
 import { EscalaService } from 'src/app/services/escala.service';
 
 interface Escala {
-  id?: string; // Firestore doc ID
-  data: string; // formato ISO
+  id?: string;
+  data: string;
   ministerio: string;
   pessoasArray: string[];
 }
@@ -39,6 +40,7 @@ interface Escala {
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonContent,
     IonList,
     IonItem,
@@ -55,17 +57,13 @@ interface Escala {
     IonSegment,
     IonSegmentButton,
     IonAccordionGroup,
-    IonAccordion
+    IonAccordion,
+    IonText
   ],
 })
 export class EscalaAdminPage implements OnInit {
   tabSelecionada: 'criar' | 'visualizar' = 'criar';
-
-  novaEscala = {
-    data: '',
-    ministerio: '',
-    pessoas: ''
-  };
+  escalaForm: FormGroup;
 
   ministerios: any[] = [];
   escalas: Escala[] = [];
@@ -74,11 +72,21 @@ export class EscalaAdminPage implements OnInit {
   constructor(
     private navigationService: NavigationService,
     private ministryService: MinistryService,
-    private escalaService: EscalaService
-  ) { }
+    private escalaService: EscalaService,
+    private fb: FormBuilder
+  ) {
+    this.escalaForm = this.fb.group({
+      data: ['', Validators.required],
+      ministerio: ['', Validators.required],
+      pessoas: ['']
+    });
+  }
 
   ngOnInit() {
-    // Carregar ministérios
+    this.carregarDados();
+  }
+
+  carregarDados() {
     this.ministryService.listarMinisterios().subscribe({
       next: (dados) => {
         this.ministerios = dados;
@@ -100,7 +108,6 @@ export class EscalaAdminPage implements OnInit {
         }
       }
     });
-
   }
 
   voltar() {
@@ -108,13 +115,14 @@ export class EscalaAdminPage implements OnInit {
   }
 
   async adicionarOuEditarEscala() {
-    if (!this.novaEscala.data || !this.novaEscala.ministerio) return;
+    if (this.escalaForm.invalid) return;
 
+    const formValue = this.escalaForm.value;
     const dadosEscala = {
-      data: this.novaEscala.data,
-      ministerio: this.novaEscala.ministerio,
-      pessoasArray: this.novaEscala.pessoas
-        ? this.novaEscala.pessoas.split(',').map(p => p.trim())
+      data: formValue.data,
+      ministerio: formValue.ministerio,
+      pessoasArray: formValue.pessoas
+        ? formValue.pessoas.split(',').map((p: string) => p.trim())
         : []
     };
 
@@ -125,19 +133,20 @@ export class EscalaAdminPage implements OnInit {
       } else {
         await this.escalaService.criarEscala(dadosEscala);
       }
-      this.novaEscala = { data: '', ministerio: '', pessoas: '' };
+      this.escalaForm.reset();
       this.tabSelecionada = 'visualizar';
+      this.carregarDados(); 
     } catch (err) {
       console.error('Erro ao salvar escala:', err);
     }
   }
 
   editarEscala(escala: Escala) {
-    this.novaEscala = {
+    this.escalaForm.setValue({
       data: escala.data,
       ministerio: escala.ministerio,
       pessoas: escala.pessoasArray.join(', ')
-    };
+    });
     this.editandoId = escala.id || null;
     this.tabSelecionada = 'criar';
   }
@@ -146,6 +155,7 @@ export class EscalaAdminPage implements OnInit {
     if (!id) return;
     try {
       await this.escalaService.excluirEscala(id);
+      this.carregarDados();
     } catch (err) {
       console.error('Erro ao remover escala:', err);
     }
@@ -167,11 +177,10 @@ export class EscalaAdminPage implements OnInit {
   }
 
   trackByData(index: number, item: any) {
-  return item.data;
-}
+    return item.data;
+  }
 
-trackById(index: number, item: any) {
-  return item.id;
-}
-
+  trackById(index: number, item: any) {
+    return item.id;
+  }
 }

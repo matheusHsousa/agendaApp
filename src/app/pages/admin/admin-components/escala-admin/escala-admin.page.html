@@ -10,8 +10,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-
-  <ion-segment [(ngModel)]="tabSelecionada">
+  <ion-segment [(ngModel)]="tabSelecionada" color="primary">
     <ion-segment-button value="criar">
       {{ editandoId ? 'Editar Escala' : 'Criar Escala' }}
     </ion-segment-button>
@@ -21,38 +20,52 @@
   </ion-segment>
 
   <div *ngIf="tabSelecionada === 'criar'" class="content">
-    <ion-item>
-      <ion-label position="stacked">Data</ion-label>
-      <ion-datetime [(ngModel)]="novaEscala.data" presentation="date"></ion-datetime>
-    </ion-item>
+    <form [formGroup]="escalaForm" (ngSubmit)="adicionarOuEditarEscala()">
+      <ion-datetime 
+        formControlName="data" 
+        presentation="date">
+      </ion-datetime>
+      <ion-text color="danger" *ngIf="escalaForm.get('data')?.hasError('required') && escalaForm.get('data')?.touched">
+        Data é obrigatória
+      </ion-text>
 
-    <ion-item >
-      <ion-label position="stacked">Ministério</ion-label>
-      <ion-select [(ngModel)]="novaEscala.ministerio">
-        <ion-select-option *ngFor="let min of ministerios" [value]="min.nome" fill="outline">
+      <ion-select 
+        formControlName="ministerio" 
+        label="Ministerio" 
+        label-placement="floating" 
+        fill="outline">
+        <ion-select-option *ngFor="let min of ministerios" [value]="min.nome">
           {{ min.nome }}
         </ion-select-option>
       </ion-select>
-    </ion-item>
+      <ion-text color="danger" *ngIf="escalaForm.get('ministerio')?.hasError('required') && escalaForm.get('ministerio')?.touched">
+        Ministério é obrigatório
+      </ion-text>
 
-    <ion-item>
-      <ion-label position="stacked">Pessoas (separadas por vírgula)</ion-label>
-      <ion-input [(ngModel)]="novaEscala.pessoas" placeholder="Ex: João, Maria, Ana" fill="outline"></ion-input>
-    </ion-item>
-
-
-    <ion-button expand="block" color="primary" (click)="adicionarOuEditarEscala()">
-      {{ editandoId ? 'Salvar Alterações' : 'Adicionar Escala' }}
-    </ion-button>
+      <ion-input 
+        formControlName="pessoas"
+        label="Pessoas (separadas por vírgula)" 
+        label-placement="floating" 
+        placeholder="Ex: João, Maria, Ana" 
+        fill="outline">
+      </ion-input>
+      
+      <ion-button 
+        type="submit" 
+        style="width: 100%;" 
+        [disabled]="escalaForm.invalid">
+        {{ editandoId ? 'Salvar' : 'Adicionar' }}
+      </ion-button>
+    </form>
   </div>
 
-  <div *ngIf="tabSelecionada === 'visualizar'">
+  <div *ngIf="tabSelecionada === 'visualizar'" style="margin-top: 20px;">
     <ion-accordion-group [multiple]="true">
       <ion-accordion *ngFor="let grupo of escalasAgrupadas; trackBy: trackByData" [value]="grupo.data">
         <ion-item slot="header" color="light">
           <ion-label>{{ grupo.data | date:'dd/MM/yyyy' }}</ion-label>
         </ion-item>
-        <div class="ion-padding" slot="content">
+        <div class="" slot="content">
           <ion-list>
             <ion-item *ngFor="let escala of grupo.escalas; trackBy: trackById">
               <ion-label>
@@ -71,5 +84,4 @@
       </ion-accordion>
     </ion-accordion-group>
   </div>
-
 </ion-content>

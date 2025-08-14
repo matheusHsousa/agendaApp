@@ -1,5 +1,8 @@
 <ion-header>
   <ion-toolbar>
+    <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
     <ion-title>Programação - Admin</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -17,6 +20,23 @@
   <div *ngIf="tabSelecionada === 'criar'" class="ion-padding create-content">
     <h2>Criar Cronograma</h2>
 
+    <div class="modelos-padrao">
+      <ion-segment [(ngModel)]="modeloSelecionado" (ionChange)="aplicarModelo()">
+        <ion-segment-button value="personalizado">
+          <ion-label>Personalizado</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="sabado">
+          <ion-label>Sábado</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="domingo">
+          <ion-label>Domingo</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="quarta">
+          <ion-label>Quarta</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+    </div>
+
     <div>
       <ion-datetime [(ngModel)]="data" presentation="date" (ionFocus)="marcarTocado('data')">
       </ion-datetime>
@@ -25,8 +45,7 @@
       </ion-note>
     </div>
 
-
-    <div>
+    <div style="margin: 20px 0;">
       <label>Hora de Início</label>
       <ion-input fill="outline" [(ngModel)]="horaInicio" type="time" (ionChange)="validarHorarioInicio()"
         (ionFocus)="marcarTocado('horaInicio')" [class.invalido]="horarioInvalido">
@@ -39,56 +58,64 @@
       </ion-note>
     </div>
 
+    <div *ngFor="let atv of atividades; let i = index">
+      <ion-card class="activity-card">
+        <ion-card-header class="title-head-card">
+          <ion-card-title>Atividade {{ i + 1 }}</ion-card-title>
+          <ion-button *ngIf="i !== 0" fill="clear" color="danger" size="small" (click)="removerAtividadeCriada(i)">
+            <ion-icon name="trash"></ion-icon>
+          </ion-button>
+        </ion-card-header>
 
-    <ion-card *ngFor="let atv of atividades; let i = index">
-      <ion-card-header class="title-head-card">
-        <ion-card-title>Atividade {{ i + 1 }}</ion-card-title>
-        <ion-button *ngIf="i !== 0" fill="clear" color="danger" size="small" (click)="removerAtividadeCriada(i)">
-          <ion-icon name="trash"></ion-icon>
+        <ion-card-content style="display: flex; flex-direction: column; gap: 20px;">
+
+          <div>
+            <ion-input label="Descrição" label-placement="floating" fill="outline" placeholder="Informe a descrição"
+              [(ngModel)]="atv.cronograma" (ionFocus)="marcarTocadoAtividade(i, 'cronograma')">
+            </ion-input>
+            <ion-note *ngIf="campoInvalidoAtividade(atv, 'cronograma', i)" color="danger">
+              Descrição obrigatória
+            </ion-note>
+          </div>
+
+          <div>
+            <ion-input label="Linha de frente" label-placement="floating" fill="outline"
+              placeholder="Informe a linha de frente" [(ngModel)]="atv.linhaFrente"
+              (ionFocus)="marcarTocadoAtividade(i, 'linhaFrente')">
+            </ion-input>
+            <ion-note *ngIf="campoInvalidoAtividade(atv, 'linhaFrente', i)" color="danger">
+              Linha de frente obrigatória
+            </ion-note>
+          </div>
+
+          <div>
+            <ion-input label="Responsável" label-placement="floating" fill="outline" placeholder="Informe o responsável"
+              [(ngModel)]="atv.responsavel" (ionFocus)="marcarTocadoAtividade(i, 'responsavel')">
+            </ion-input>
+            <ion-note *ngIf="campoInvalidoAtividade(atv, 'responsavel', i)" color="danger">
+              Responsável obrigatório
+            </ion-note>
+          </div>
+
+          <div>
+            <ion-input label="Duração (min)" label-placement="floating" fill="outline" type="number"
+              placeholder="Informe a duração" [(ngModel)]="atv.duracao"
+              (ionFocus)="marcarTocadoAtividade(i, 'duracao')">
+            </ion-input>
+            <ion-note *ngIf="campoInvalidoAtividade(atv, 'duracao', i)" color="danger">
+              Informe uma duração maior que 0
+            </ion-note>
+          </div>
+
+        </ion-card-content>
+      </ion-card>
+
+      <div *ngIf="i < atividades.length - 1" class="between-cards-button">
+        <ion-button (click)="adicionarAtividadeNoMeio(i + 1)" class="add-button">
+          <ion-icon name="add" color="primary"></ion-icon>
         </ion-button>
-      </ion-card-header>
-
-      <ion-card-content style="display: flex; flex-direction: column; gap: 20px;">
-
-        <div>
-          <ion-input label="Descrição" label-placement="floating" fill="outline" placeholder="Informe a descrição"
-            [(ngModel)]="atv.cronograma" (ionFocus)="marcarTocadoAtividade(i, 'cronograma')">
-          </ion-input>
-          <ion-note *ngIf="campoInvalidoAtividade(atv, 'cronograma', i)" color="danger">
-            Descrição obrigatória
-          </ion-note>
-        </div>
-
-        <div>
-          <ion-input label="Linha de frente" label-placement="floating" fill="outline"
-            placeholder="Informe a linha de frente" [(ngModel)]="atv.linhaFrente"
-            (ionFocus)="marcarTocadoAtividade(i, 'linhaFrente')">
-          </ion-input>
-          <ion-note *ngIf="campoInvalidoAtividade(atv, 'linhaFrente', i)" color="danger">
-            Linha de frente obrigatória
-          </ion-note>
-        </div>
-
-        <div>
-          <ion-input label="Responsável" label-placement="floating" fill="outline" placeholder="Informe o responsável"
-            [(ngModel)]="atv.responsavel" (ionFocus)="marcarTocadoAtividade(i, 'responsavel')">
-          </ion-input>
-          <ion-note *ngIf="campoInvalidoAtividade(atv, 'responsavel', i)" color="danger">
-            Responsável obrigatório
-          </ion-note>
-        </div>
-
-        <div>
-          <ion-input label="Duração (min)" label-placement="floating" fill="outline" type="number"
-            placeholder="Informe a duração" [(ngModel)]="atv.duracao" (ionFocus)="marcarTocadoAtividade(i, 'duracao')">
-          </ion-input>
-          <ion-note *ngIf="campoInvalidoAtividade(atv, 'duracao', i)" color="danger">
-            Informe uma duração maior que 0
-          </ion-note>
-        </div>
-
-      </ion-card-content>
-    </ion-card>
+      </div>
+    </div>
 
     <div class="fixed-bottom-button">
       <ion-button expand="block" (click)="adicionarAtividade()" shape="round">
