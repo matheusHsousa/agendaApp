@@ -56,6 +56,7 @@ export class HomePage implements AfterViewInit {
   @ViewChildren('animado', { read: ElementRef })
   elementosAnimaveis!: QueryList<ElementRef>;
 
+
   constructor(
     private authService: AuthService,
     private scheduleService: ScheduleService,
@@ -92,25 +93,21 @@ export class HomePage implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target as HTMLElement;
+    // Espera até que os eventos estejam carregados
+    const checkData = setInterval(() => {
+      if (this.proximosEventos.length > 0 || this.user) {
+        clearInterval(checkData);
+        this.animateElements();
+      }
+    }, 100);
+  }
 
-          if (entry.isIntersecting) {
-            const delay = el.getAttribute('data-delay') || '0';
-            setTimeout(() => {
-              el.classList.add('visible');
-            }, +delay);
-            observer.unobserve(el);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    this.elementosAnimaveis.forEach((el) => {
-      observer.observe(el.nativeElement);
+  animateElements() {
+    this.elementosAnimaveis.forEach((el, index) => {
+      const delay = el.nativeElement.getAttribute('data-delay') || 0;
+      setTimeout(() => {
+        el.nativeElement.classList.add('animated');
+      }, +delay);
     });
   }
 
@@ -190,7 +187,7 @@ export class HomePage implements AfterViewInit {
     const image = document.getElementById('headerImage');
     if (image) {
       const fadeStart = 0;
-      const fadeEnd = 150;
+      const fadeEnd = 220;
       const opacity = 1 - Math.min(Math.max((scrollTop - fadeStart) / (fadeEnd - fadeStart), 0), 1);
       image.style.opacity = opacity.toString();
     }

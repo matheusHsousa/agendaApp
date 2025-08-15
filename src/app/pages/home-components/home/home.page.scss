@@ -8,7 +8,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: opacity 0.2s ease-out;
+  transition: opacity 0.3s ease-out;
 }
 
 
@@ -57,15 +57,23 @@
   overflow: hidden;
   width: 100%;
   position: relative;
-  margin: 20px 0px 10px 0px;
+  margin: 20px 0px 20px 0px;
 }
 
 .titulo-evento {
   margin-left: 10px;
-  color: #4d8dff;
-  font-weight: 600;
-  font-size: 15px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background: linear-gradient(45deg, #4d8dff, #6ca0ff);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
+
 
 .carrossel-wrapper {
   display: flex;
@@ -79,7 +87,7 @@
 .evento-card {
   padding: 12px;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 1px 1px 1px rgba(var(--ion-color-dark-rgb), 0.1);
   min-width: 220px;
   flex: 0 0 auto;
   margin-left: 10px;
@@ -192,10 +200,8 @@ ion-card {
 }
 
 
-
-/* Ícones pretos não funcionam aqui */
-ion-icon {
-  color: white !important;
+.ion-icon-card {
+  color: var(--ion-color-dark) !important;
 }
 
 .card-degrade1 {
@@ -259,23 +265,23 @@ ion-card:hover::after {
 
 /* Imagens específicas */
 .card-degrade1::after {
-  background-image: url('../../../../assets/images/dizimo.jpg');
+  background-image: url('/assets/images/dizimo.jpg');
 }
 
 .card-degrade2::after {
-  background-image: url('../../../../assets/images/es.jpg');
+  background-image: url('/assets/images/es.jpg');
 }
 
 .card-degrade3::after {
-  background-image: url('../../../../assets/images/igreja.png');
+  background-image: url('/assets/images/igreja.png');
 }
 
 .card-degrade5::after {
-  background-image: url('../../../../assets/images/prancheta.png');
+  background-image: url('/assets/images/prancheta.png');
 }
 
 .card-degrade4::after {
-  background-image: url('../../../../assets/images/redes.webp');
+  background-image: url('/assets/images/redes.webp');
 }
 
 

@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <ion-card class="sem-margem fade-in" *ngIf="proximosEventos.length > 0">
+  <ion-card  #animado data-delay="0" class="sem-margem" *ngIf="proximosEventos.length > 0">
     <div class="carrossel-container">
       <label class="titulo-evento">Próximos Eventos</label>
 
@@ -22,7 +22,7 @@
           <label><strong>Evento: {{ evento.nomeEvento }}</strong></label>
           <label>Pregador: {{ evento.nomePregador }}</label>
           <label class="data-hora-evento">
-            <ion-icon slot="start" name="calendar"></ion-icon>
+            <ion-icon slot="start" name="calendar" class="ion-icon-card" ></ion-icon>
             {{ formatarDia(evento.dataHora) }} | {{ formatarHora(evento.dataHora) }}
           </label>
         </div>
@@ -31,7 +31,7 @@
   </ion-card>
 
   <div>
-    <ion-card class="fade-in card-degrade1" (click)="openPix()" #animado data-delay="0">
+    <!-- <ion-card class="fade-in card-degrade1" (click)="openPix()" #animado data-delay="0">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
@@ -40,9 +40,9 @@
           </div>
         </ion-card-title>
       </ion-card-header>
-    </ion-card>
+    </ion-card> -->
 
-    <ion-card class="fade-in card-degrade2" (click)="goToSabbathSchool()" #animado data-delay="100">
+    <ion-card class="fade-in card-degrade2"  (click)="goToSabbathSchool()" #animado data-delay="100">
       <ion-card-header>
         <ion-card-title>
           <div class="titulo-com-icone">
