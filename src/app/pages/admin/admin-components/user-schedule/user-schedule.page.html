@@ -10,7 +10,7 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
- <div  class="calendar-container">
+  <div class="calendar-container">
     <div class="calendar-header">
       <ion-button fill="clear" (click)="mesAnterior()">
         <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
@@ -23,20 +23,23 @@
       </ion-button>
     </div>
 
-    <div class="calendar-grid">
-      <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
-      <div class="calendar-day" *ngFor="let dia of diasNoCalendario" [ngClass]="{
-          ocupado: diasComAgendamento.includes(dia.data),
-          livre: !diasComAgendamento.includes(dia.data)
-        }" (click)="selecionarDia(dia.data)">
-        {{ dia.numero }}
+    <div class="calendar-container">
+
+      <div class="calendar-grid">
+        <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
+        <div class="calendar-day" *ngFor="let dia of diasNoCalendario; trackBy: trackByDia" [ngClass]="{
+           'calendar-day-empty': dia.numero === 0,
+           'ocupado': dia.numero !== 0 && diasComAgendamento.includes(dia.data),
+           'livre': dia.numero !== 0 && !diasComAgendamento.includes(dia.data)
+         }" (click)="dia.numero !== 0 ? selecionarDia(dia.data) : null">
+          {{ dia.numero !== 0 ? dia.numero : '' }}
+        </div>
       </div>
     </div>
 
     <div *ngIf="agendamentosDoDia.length" id="agendamentosContainer">
       <h4>Agendamentos de {{ formatarDiaSemana(diaSelecionado) }}:</h4>
-      <ion-list>
-        <ion-item *ngFor="let evento of agendamentosDoDia">
+        <div *ngFor="let evento of agendamentosDoDia">
           <ion-label>
             <h3>Evento: {{ evento.nomeEvento }}</h3>
             <p>Ministério: {{ evento.ministerio }}</p>
@@ -44,8 +47,7 @@
 
             <p>Hora: {{ formatarHora(evento.dataHora) }}</p>
           </ion-label>
-        </ion-item>
-      </ion-list>
+        </div>
     </div>
   </div>
 </ion-content>

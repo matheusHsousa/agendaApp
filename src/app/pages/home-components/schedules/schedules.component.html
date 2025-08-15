@@ -10,7 +10,6 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-  <!-- Segmento de menu -->
   <ion-segment [(ngModel)]="menuSelecionado">
     <ion-segment-button value="formulario">
       <ion-label>Agendar</ion-label>
@@ -20,7 +19,6 @@
     </ion-segment-button>
   </ion-segment>
 
-  <!-- Formulário -->
   <div *ngIf="menuSelecionado === 'formulario'">
     <h2>Agendamento</h2>
     <form (ngSubmit)="onSubmit()" #agendamentoForm="ngForm">
@@ -49,7 +47,6 @@
     </form>
   </div>
 
-  <!-- Calendário -->
   <div *ngIf="menuSelecionado === 'calendario'" class="calendar-container">
     <div class="calendar-header">
       <ion-button fill="clear" (click)="mesAnterior()">
@@ -66,10 +63,11 @@
     <div class="calendar-grid">
       <div class="day-name" *ngFor="let dia of diasSemana">{{ dia }}</div>
       <div class="calendar-day" *ngFor="let dia of diasNoCalendario" [ngClass]="{
-          ocupado: diasComAgendamento.includes(dia.data),
-          livre: !diasComAgendamento.includes(dia.data)
-        }" (click)="selecionarDia(dia.data)">
-        {{ dia.numero }}
+         'dia-vazio': dia.numero === 0,
+         'ocupado': dia.numero !== 0 && diasComAgendamento.includes(dia.data),
+         'livre': dia.numero !== 0 && !diasComAgendamento.includes(dia.data)
+       }" (click)="dia.numero !== 0 ? selecionarDia(dia.data) : null">
+        {{ dia.numero !== 0 ? dia.numero : '' }}
       </div>
     </div>
 

@@ -52,32 +52,31 @@ export class UserSchedulePage implements OnInit {
   }
 
   async carregarAgendamentosDoMes() {
+    console.log('Carregando agendamentos...'); // Adicione este log
+
     this.diasNoCalendario = [];
     this.diasComAgendamento = [];
-    this.scheduleService.listarSchedules().subscribe((
-      data
-    ) => {;
-    this.agendamentos = data
 
-    const primeiroDia = moment(new Date(this.anoAtual, this.mesAtual)).startOf('month');
-    const qtdDias = primeiroDia.daysInMonth();
-    const diaSemanaInicio = primeiroDia.day();
+    this.scheduleService.listarSchedules().subscribe((data) => {
+     console.log('Dados recebidos:', data)
+      this.agendamentos = data;
 
-    for (let i = 0; i < diaSemanaInicio; i++) {
-      this.diasNoCalendario.push({ numero: 0, data: '' });
-    }
+      const primeiroDia = moment(new Date(this.anoAtual, this.mesAtual)).startOf('month');
+      const qtdDias = primeiroDia.daysInMonth();
+      const diaSemanaInicio = primeiroDia.day();
 
-    for (let dia = 1; dia <= qtdDias; dia++) {
-      const dataFormatada = moment(new Date(this.anoAtual, this.mesAtual, dia)).format('YYYY-MM-DD');
-      this.diasNoCalendario.push({ numero: dia, data: dataFormatada });
+      for (let i = 0; i < diaSemanaInicio; i++) {
+        this.diasNoCalendario.push({ numero: 0, data: '' });
+      }
 
-      const existe = this.agendamentos.some(a =>
-        a.dataHora.startsWith(dataFormatada)
-      );
-      if (existe) this.diasComAgendamento.push(dataFormatada);
-    }
+      for (let dia = 1; dia <= qtdDias; dia++) {
+        const dataFormatada = moment(new Date(this.anoAtual, this.mesAtual, dia)).format('YYYY-MM-DD');
+        this.diasNoCalendario.push({ numero: dia, data: dataFormatada });
 
-  })
+        const existe = this.agendamentos.some(a => a.dataHora.startsWith(dataFormatada));
+        if (existe) this.diasComAgendamento.push(dataFormatada);
+      }
+    });
   }
 
   selecionarDia(data: string) {
@@ -132,5 +131,9 @@ export class UserSchedulePage implements OnInit {
 
   formatarHora(dataHora: string): string {
     return moment(dataHora).format('HH:mm');
+  }
+
+  trackByDia(index: number, dia: any): number {
+    return dia.numero; // ou index se preferir
   }
 }

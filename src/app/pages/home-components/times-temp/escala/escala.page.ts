@@ -53,17 +53,20 @@ export class EscalaPage implements OnInit {
 
   carregarEscalas() {
     const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0); // Zerar horas para comparar apenas a data
 
     this.subscription = this.escalaService.listarEscalas().subscribe({
       next: (dados: any) => {
+        console.log(dados);
 
-        // Filtra só escalas a partir de hoje
+        // Filtrar escalas futuras ou do dia atual
         const futuras = dados.filter((escala: any) => {
           const dataEscala = new Date(escala.data);
+          dataEscala.setHours(0, 0, 0, 0); // Zerar horas para comparar apenas a data
           return dataEscala >= hoje;
         });
 
-        // Ordena por data
+        // Ordenar por data
         futuras.sort((a: any, b: any) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
         if (futuras.length === 0) {
@@ -71,17 +74,19 @@ export class EscalaPage implements OnInit {
           return;
         }
 
-        // Pega a data mais próxima
+        // Pegar a primeira data disponível (a mais próxima)
         const primeiraData = new Date(futuras[0].data);
-        const diaMaisProximo = primeiraData.toISOString().split('T')[0]; // "YYYY-MM-DD"
+        primeiraData.setHours(0, 0, 0, 0);
 
-        // Filtra todas as escalas desse mesmo dia
-        const mesmasDoDia = futuras.filter((escala: any) => {
-          return escala.data.startsWith(diaMaisProximo);
+        // Filtrar todas as escalas dessa data
+        const escalasProximaData = futuras.filter((escala: any) => {
+          const dataEscala = new Date(escala.data);
+          dataEscala.setHours(0, 0, 0, 0);
+          return dataEscala.getTime() === primeiraData.getTime();
         });
 
-        // Mapeia para o formato usado no HTML
-        this.ministerios = mesmasDoDia.map((escala: any) => {
+        // Formatar os dados para exibição
+        this.ministerios = escalasProximaData.map((escala: any) => {
           const dataObj = new Date(escala.data);
           const diasSemana = [
             'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira',

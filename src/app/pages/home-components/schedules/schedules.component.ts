@@ -134,32 +134,45 @@ export class SchedulesComponent {
   }
 
   async carregarAgendamentosDoMes() {
-    this.diasNoCalendario = [];
-    this.diasComAgendamento = [];
-    this.scheduleService.listarSchedules().subscribe((data) => {
+  this.diasNoCalendario = [];
+  this.diasComAgendamento = [];
+  
+  this.scheduleService.listarSchedules().subscribe((data) => {
+    this.agendamentos = data;
 
+    const primeiroDiaDoMes = new Date(this.anoAtual, this.mesAtual, 1);
+    const ultimoDiaDoMes = new Date(this.anoAtual, this.mesAtual + 1, 0);
+    
+    // Dia da semana do primeiro dia do mês (0 = Domingo, 1 = Segunda, etc.)
+    const diaSemanaInicio = primeiroDiaDoMes.getDay();
+    
+    // Quantidade de dias no mês
+    const qtdDias = ultimoDiaDoMes.getDate();
 
-      this.agendamentos = data
+    // Adiciona dias vazios para alinhar o primeiro dia do mês com o dia da semana correto
+    for (let i = 0; i < diaSemanaInicio; i++) {
+      this.diasNoCalendario.push({ numero: 0, data: '' });
+    }
 
-      const primeiroDia = moment(new Date(this.anoAtual, this.mesAtual)).startOf('month');
-      const qtdDias = primeiroDia.daysInMonth();
-      const diaSemanaInicio = primeiroDia.day();
+    // Adiciona os dias do mês
+    for (let dia = 1; dia <= qtdDias; dia++) {
+      const dataFormatada = moment(new Date(this.anoAtual, this.mesAtual, dia)).format('YYYY-MM-DD');
+      this.diasNoCalendario.push({ numero: dia, data: dataFormatada });
 
-      for (let i = 0; i < diaSemanaInicio; i++) {
-        this.diasNoCalendario.push({ numero: 0, data: '' });
-      }
+      const existe = this.agendamentos.some(a =>
+        a.dataHora.startsWith(dataFormatada)
+      );
+      if (existe) this.diasComAgendamento.push(dataFormatada);
+    }
 
-      for (let dia = 1; dia <= qtdDias; dia++) {
-        const dataFormatada = moment(new Date(this.anoAtual, this.mesAtual, dia)).format('YYYY-MM-DD');
-        this.diasNoCalendario.push({ numero: dia, data: dataFormatada });
-
-        const existe = this.agendamentos.some(a =>
-          a.dataHora.startsWith(dataFormatada)
-        );
-        if (existe) this.diasComAgendamento.push(dataFormatada);
-      }
-    })
-  }
+    // Adiciona dias vazios no final para completar a última semana (opcional)
+    const totalCells = Math.ceil((diaSemanaInicio + qtdDias) / 7) * 7;
+    const remainingCells = totalCells - (diaSemanaInicio + qtdDias);
+    for (let i = 0; i < remainingCells; i++) {
+      this.diasNoCalendario.push({ numero: 0, data: '' });
+    }
+  });
+}
 
   selecionarDia(data: string) {
     this.diaSelecionado = data;
@@ -167,6 +180,11 @@ export class SchedulesComponent {
       a.dataHora.startsWith(data)
     );
   }
+
+  get filteredDays() {
+    return this.diasNoCalendario.filter(day => day.numero !== 0);
+  }
+
 
   proximoMes() {
     if (this.mesAtual === 11) {

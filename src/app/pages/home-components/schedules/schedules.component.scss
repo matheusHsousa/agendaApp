@@ -57,12 +57,12 @@
 }
 
 .calendar-day.ocupado {
-  background-color: #ff6b6b; // vermelho
+  background: var(--ion-color-primary);
   color: white;
 }
 
 .calendar-day.livre {
-  background-color: #51cf66; // verde
+  background-color: var(--ion-color-light);
   color: white;
 }
 
@@ -76,3 +76,6 @@
   width: 100%;
 }
 
+.dia-vazio {
+  visibility: hidden;
+}
