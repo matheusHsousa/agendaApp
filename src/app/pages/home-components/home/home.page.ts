@@ -187,7 +187,7 @@ export class HomePage implements AfterViewInit {
     const image = document.getElementById('headerImage');
     if (image) {
       const fadeStart = 0;
-      const fadeEnd = 220;
+      const fadeEnd = 300;
       const opacity = 1 - Math.min(Math.max((scrollTop - fadeStart) / (fadeEnd - fadeStart), 0), 1);
       image.style.opacity = opacity.toString();
     }
