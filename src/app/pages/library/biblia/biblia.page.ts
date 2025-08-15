@@ -74,11 +74,7 @@ export class BibliaPage implements OnInit {
 
   selecionarVersiculo(indice: number) {
     this.indiceVersiculoAtual = indice;
-
-    // Salvar versículo selecionado
     localStorage.setItem('indiceVersiculoAtual', this.indiceVersiculoAtual.toString());
-
-    // Dar um timeout para garantir que o DOM esteja atualizado
     setTimeout(() => {
       const id = 'versiculo-' + (this.indiceVersiculoAtual + 1);
       const element = document.getElementById(id);
