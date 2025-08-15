@@ -16,7 +16,7 @@
       <div>
         <ion-buttons>
           <ion-button (click)="anteriorCapitulo()" [disabled]="indiceCapituloAtual === 0" size="small">
-            <ion-icon name="chevron-back-outline"></ion-icon>
+            <ion-icon  class="btn-color" name="chevron-back-outline"></ion-icon>
           </ion-button>
 
           <ion-select [(ngModel)]="indiceCapituloAtual"
@@ -31,7 +31,7 @@
           </ion-select>
 
           <ion-button (click)="proximoCapitulo()" size="small">
-            <ion-icon name="chevron-forward-outline"></ion-icon>
+            <ion-icon  class="btn-color" name="chevron-forward-outline"></ion-icon>
           </ion-button>
         </ion-buttons>
       </div>

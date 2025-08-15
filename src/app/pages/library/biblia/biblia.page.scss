@@ -1,9 +1,44 @@
 .toolbar {
     display: flex;
     justify-content: space-between;
-    padding: 0px 10px;
+    align-items: center;
+    padding: 0 8px;
+    gap: 8px;
+    ion-select {
+        --placeholder-color: white;
+    }
+}
+
+
+ion-select {
+    width: 100%;
+    max-width: 150px;
+    padding: 8px;
+    color: var(--ion-color-dark);
+}
+
+ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
 }
 
 .versiculo {
-    padding: 5px;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background: var(--ion-color-light);
+    transition: background 0.2s ease;
+
+    strong {
+        color: var(--ion-color-primary);
+        font-weight: bold;
+    }
+
+    &.selecionado strong {
+        color: white;
+    }
+}
+
+.btn-color {
+    color:  var(--ion-color-dark);;
 }
