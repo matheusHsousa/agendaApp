@@ -5,9 +5,12 @@ import { LoadingService } from './services/loading.service';
 import { CustomLoaderPage } from './../app/pages/custom-loader/custom-loader.page';
 import { AuthService } from './services/auth.service';
 import { AnimationController } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
 
 declare var OneSignal: any;
-
+App.exitApp();
 
 @Component({
   selector: 'app-root',
@@ -18,16 +21,24 @@ declare var OneSignal: any;
 })
 export class AppComponent implements OnInit {
   isLoading = true;
-  
+
 
   constructor(
     private loadingService: LoadingService,
     private authService: AuthService,
-    private animationCtrl: AnimationController
-  ) {}
+    private animationCtrl: AnimationController,
+    private platform: Platform,
+    private router: Router
+  ) {
+    this.platform.backButton.subscribeWithPriority(10, () => {
+      if (this.router.url === '/tabs/home') {
+        App.exitApp(); 
+      } else {
+        window.history.back();
+    }});
+  }
 
   ngOnInit() {
-    // Monitora o loader
     this.loadingService.loading$.subscribe(status => {
       this.isLoading = status;
     });
@@ -35,7 +46,7 @@ export class AppComponent implements OnInit {
     // Trata login/callback
     this.authService.handleRedirectCallback();
 
-   if ((window as any).cordova) {
+    if ((window as any).cordova) {
       OneSignal.setAppId('4bc30d9a-f6d3-4b56-b1ed-1931a2a55960');
 
       OneSignal.promptForPushNotificationsWithUserResponse((response: any) => {

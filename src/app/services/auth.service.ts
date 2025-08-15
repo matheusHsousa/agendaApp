@@ -59,7 +59,7 @@ export class AuthService {
   async login(email: string, password: string) {
     const result = await signInWithEmailAndPassword(this.auth, email, password);
     await this.updateUserData(result.user);
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
   }
 
   async loginWithGoogle() {
@@ -91,7 +91,7 @@ export class AuthService {
 
     const result = await signInWithCredential(this.auth, credential);
     await this.updateUserData(result.user);
-    this.router.navigateByUrl('/home');
+    this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
   }
 
   private async handleWebGoogleLogin() {
@@ -103,7 +103,7 @@ export class AuthService {
       try {
         const result = await signInWithPopup(this.auth, provider);
         await this.updateUserData(result.user);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
       } catch (error) {
         const errorMessage = this.getErrorMessage(error);
         console.error('Erro no login com popup:', errorMessage);
@@ -199,7 +199,7 @@ export class AuthService {
       const result = await getRedirectResult(this.auth);
       if (result && result.user) {
         await this.updateUserData(result.user);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
       }
     } catch (error) {
       const errorMessage = this.getErrorMessage(error);
