@@ -297,5 +297,4 @@ ion-card:hover::after {
   position: sticky;
   top: 0;
   z-index: 100; /* para ficar acima de outros elementos */
-  background: var(--ion-background-color, #fff); /* fundo para não ficar transparente */
 }
