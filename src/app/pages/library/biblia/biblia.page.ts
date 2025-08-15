@@ -94,6 +94,7 @@ export class BibliaPage implements OnInit {
     if (this.indiceCapituloAtual > 0) {
       this.indiceCapituloAtual--;
       this.carregarCapitulo(this.indiceCapituloAtual);
+      this.selecionarVersiculo(0)
     }
   }
 
@@ -103,6 +104,7 @@ export class BibliaPage implements OnInit {
     if (this.indiceCapituloAtual < this.livroSelecionado.chapters.length - 1) {
       this.indiceCapituloAtual++;
       this.carregarCapitulo(this.indiceCapituloAtual);
+      this.selecionarVersiculo(0)
     }
   }
 
