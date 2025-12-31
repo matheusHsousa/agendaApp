@@ -25,7 +25,8 @@ npm install -g firebase-tools
 # Fazer login
 firebase login
 
-# Deploy das funções (se existirem na pasta push-functions)
+# Deploy das funções
+# Nota: Crie a pasta 'push-functions' se precisar adicionar Cloud Functions
 firebase deploy --only functions
 ```
 
@@ -153,11 +154,10 @@ Alternativa open-source ao Firebase.
 ---
 
 ### 7. **Heroku (Limitado)**
-**⚠️ Nota:** Heroku eliminou seu plano gratuito em novembro de 2022, mas ainda oferece créditos para estudantes.
-
-**Alternativa:** Heroku oferece créditos através do GitHub Student Developer Pack.
+**⚠️ Nota:** Heroku eliminou seu plano gratuito em novembro de 2022. Atualmente, oferece créditos através do GitHub Student Developer Pack para estudantes.
 
 **Site:** https://www.heroku.com
+**Melhor para:** Estudantes com acesso ao GitHub Student Pack
 
 ---
 
@@ -228,4 +228,4 @@ firebase deploy --only hosting
 
 ---
 
-**Última atualização:** Dezembro 2025
+**Última atualização:** Dezembro 2024
