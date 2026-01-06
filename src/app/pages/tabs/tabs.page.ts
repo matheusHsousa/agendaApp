@@ -32,6 +32,8 @@ import { NavigationService } from 'src/app/services/navigate.service';
 export class TabsPage {
   role: string | null = null;
   isAdmin = false;
+  isMaster = false;
+  isMinistry = false;
   proximosEventos: any[] = [];
   tabOrder = ['home', 'biblia', 'meditacoes', 'admin'];
   currentTab: string = 'home';
@@ -44,7 +46,9 @@ export class TabsPage {
     this.authService.user$.subscribe(async user => {
       if (user) {
         this.role = user.role || null;
-        this.isAdmin = this.role === 'Admin';
+        this.isAdmin = this.role === 'Admin' || this.role === 'master';
+        this.isMaster = this.role === 'master';
+        this.isMinistry = this.role === 'ministry';
         await this.carregarProximosEventos(user.uid);
       }
     });

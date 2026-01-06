@@ -1,0 +1,129 @@
+/* ===== LAYOUT ===== */
+
+ion-content {
+  --background: #0f1115;
+}
+
+.escala-wrap {
+  padding: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===== ACCORDION CARD ===== */
+
+ion-accordion {
+  margin-bottom: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #16181d;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ===== HEADER ===== */
+
+.escala-header-item {
+  --background: transparent;
+}
+
+.escala-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px;
+}
+
+.escala-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #5b8cff, #7a5cff);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.escala-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.escala-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.escala-subtitle {
+  font-size: 0.82rem;
+  color: #9aa0aa;
+}
+
+.chevron {
+  font-size: 1.2rem;
+  color: #9aa0aa;
+}
+
+/* ===== BODY ===== */
+
+.escala-body {
+  padding: 14px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: #121419;
+}
+
+/* ===== PESSOAS ===== */
+
+.pessoas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.pessoa-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: #1c1f26;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.pessoa-chip .initial {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #5b8cff, #7a5cff);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.more-chip {
+  background: rgba(255,255,255,0.06);
+  color: #cfd3da;
+}
+
+.empty-state {
+  width: 100%;
+  text-align: center;
+  padding: 16px 0;
+  font-size: 0.9rem;
+  color: #8b9099;
+}
+
+
+.toolbar-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}

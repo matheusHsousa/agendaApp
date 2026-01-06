@@ -14,7 +14,7 @@
       <ion-icon name="bookmark-outline"></ion-icon> <ion-label>Biblioteca</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button tab="admin" *ngIf="isAdmin">
+    <ion-tab-button tab="admin" *ngIf="isAdmin || isMaster || isMinistry">
       <ion-icon name="person-circle"></ion-icon>
       <ion-label>Admin</ion-label>
     </ion-tab-button>

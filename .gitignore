@@ -69,3 +69,5 @@ testem.log
 .DS_Store
 Thumbs.db
 .env
+.angular
+node_modules

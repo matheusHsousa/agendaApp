@@ -1,32 +1,153 @@
 .content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: stretch;
+  margin: 32px auto 0;
+  padding: 0 18px 24px;
+  max-width: 980px;
 }
 
-.icon-arrow{
-    color: #2c5364;
+.icon-arrow {
+  color: #2c5364;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.icon-arrow:hover {
+  transform: translateX(6px);
+  color: var(--ion-color-primary);
 }
 
 .toolbar-content {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
+  padding: 12px 0;
+  margin-bottom: 6px;
+  border-bottom: 1px solid rgba(44,83,100,0.06);
 }
 
 .modelos-padrao {
-  margin-bottom: 20px;
-  
+  margin-bottom: 28px;
+  width: 100%;
+
   ion-segment {
+    display: inline-flex;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.03);
+    padding: 4px;
+
     ion-segment-button {
       --color-checked: var(--ion-color-primary);
       min-width: auto;
+      padding: 8px 14px;
+      font-weight: 600;
+      transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
+
       ion-label {
-        font-size: 0.8rem;
+        font-size: 0.95rem;
         white-space: nowrap;
+        line-height: 1.1;
       }
     }
   }
 }
+
+/* Ajustes para itens internos e espaçamento vertical consistente */
+.content > * {
+  margin-bottom: 0;
+}
+
+/* Seções internas que precisem de espaçamento extra */
+.spaced-section {
+  padding: 12px 0;
+}
+
+@media (max-width: 600px) {
+  .content {
+    gap: 16px;
+    margin-top: 18px;
+    padding: 0 12px 18px;
+  }
+
+  .modelos-padrao {
+    margin-bottom: 18px;
+  }
+
+  .toolbar-content {
+    padding: 8px 0;
+  }
+}
+
+/* Form section styling */
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.form-section ion-datetime,
+.form-section ion-select,
+.form-section ion-input {
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+.form-submit {
+  width: 100%;
+  --border-radius: 8px;
+  --background: var(--ion-color-primary);
+  --color: #fff;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+
+/* Visualizar / lista */
+.visualizar {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.accordion-content ion-list {
+  padding: 8px 0 16px;
+}
+
+.accordion-content ion-item {
+  --padding-start: 12px;
+  --inner-padding-start: 12px;
+  --padding-end: 12px;
+  align-items: center;
+}
+
+.accordion-content ion-item ion-label h2 {
+  margin: 0 0 4px 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.accordion-content ion-item ion-label p {
+  margin: 0;
+  color: rgba(0,0,0,0.6);
+  font-size: 0.92rem;
+}
+
+.accordion-content ion-item ion-button {
+  margin-left: 6px;
+}
+
+/* Improve compactness and vertical rhythm for the whole page */
+ion-header.header {
+  --background: #ffffff;
+  box-shadow: none;
+}
+
+ion-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+/* Utility class for sections that need extra spacing */
+.spaced-section { padding: 14px 0; }

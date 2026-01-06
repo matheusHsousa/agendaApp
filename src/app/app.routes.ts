@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { LoginPage } from './pages/login/login.page';
 import { HomePage } from './pages/home-components/home/home.page';
-import { isLoggedInGuard, isAdminGuard } from './guards/auth.guard';
+import { isLoggedInGuard, isAdminGuard, isMasterGuard, isMinistryGuard } from './guards/auth.guard';
 import { BibliaPage } from './pages/library/biblia/biblia.page';
 import { MeditacoesPage } from './pages/library/meditacoes/meditacoes.page';
 import { LeitorPdfComponent } from './pages/library/leitor-pdf/leitor-pdf.page';
@@ -45,7 +45,12 @@ export const routes: Routes = [
       {
         path: 'escala-admin',
         loadComponent: () => import('./pages/admin/admin-components/escala-admin/escala-admin.page').then(m => m.EscalaAdminPage),
-        canActivate: [isAdminGuard],
+        canActivate: [isMinistryGuard],
+      },
+      {
+        path: 'ministry-members',
+        loadComponent: () => import('./pages/admin/admin-components/ministry-members/ministry-members.page').then(m => m.MinistryMembersPage),
+        canActivate: [isMinistryGuard],
       },
       {
         path: 'schedule',
@@ -56,6 +61,11 @@ export const routes: Routes = [
         path: 'ministries',
         loadComponent: () => import('./pages/admin/admin-components/ministries/ministries.page').then(m => m.MinistriesPage),
         canActivate: [isAdminGuard],
+      },
+      {
+        path: 'user-management',
+        loadComponent: () => import('./pages/admin/admin-components/user-management/user-management.page').then(m => m.UserManagementPage),
+        canActivate: [isMasterGuard],
       },
       {
         path: 'user-schedule',

@@ -1,0 +1,92 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/admin"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Gerenciar Usuários e Cargos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    (ionInput)="buscarUsuarios($event)"
+    placeholder="Buscar por email ou nome"
+    animated="true"
+  ></ion-searchbar>
+
+  <div *ngIf="loading" class="loading-container">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Carregando usuários...</p>
+  </div>
+
+  <ion-list *ngIf="!loading">
+    <ion-card *ngFor="let usuario of usuariosFiltrados">
+      <ion-card-header>
+        <div class="user-header">
+          <div class="user-info">
+            <img 
+              *ngIf="usuario.photoURL" 
+              [src]="usuario.photoURL" 
+              alt="Foto do usuário" 
+              class="user-photo"
+            />
+            <div>
+              <ion-card-title>{{ usuario.displayName || 'Sem nome' }}</ion-card-title>
+              <p class="user-email">{{ usuario.email }}</p>
+            </div>
+          </div>
+          <ion-chip [color]="getRoleColor(usuario.role)">
+            <ion-icon [name]="getRoleIcon(usuario.role)"></ion-icon>
+            <ion-label>{{ getRoleLabel(usuario.role) }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item>
+          <ion-label position="stacked">Cargo</ion-label>
+          <ion-select
+            [(ngModel)]="usuario.role"
+            (ionChange)="onRoleChange(usuario, $event)"
+            interface="popover"
+          >
+            <ion-select-option value="user">Usuário</ion-select-option>
+            <ion-select-option value="ministry">Ministério</ion-select-option>
+            <ion-select-option value="Admin">Administrador</ion-select-option>
+            <ion-select-option value="master">Master</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="usuario.role === 'ministry'">
+          <ion-label position="stacked">Ministério</ion-label>
+          <ion-select
+            [(ngModel)]="usuario.ministryId"
+            (ionChange)="onMinistryChange(usuario, $event)"
+            interface="popover"
+            placeholder="Selecione um ministério"
+          >
+            <ion-select-option 
+              *ngFor="let ministerio of ministerios" 
+              [value]="ministerio.id"
+            >
+              {{ ministerio.nome }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <div *ngIf="usuario.ministryName" class="ministry-info">
+          <ion-chip color="primary">
+            <ion-icon name="briefcase-outline"></ion-icon>
+            <ion-label>{{ usuario.ministryName }}</ion-label>
+          </ion-chip>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <div *ngIf="!loading && usuariosFiltrados.length === 0" class="empty-state">
+    <ion-icon name="people-outline" size="large"></ion-icon>
+    <p>Nenhum usuário encontrado</p>
+  </div>
+</ion-content>

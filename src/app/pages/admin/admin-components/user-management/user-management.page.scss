@@ -1,0 +1,173 @@
+ion-content {
+  --padding-top: 0;
+  --padding-bottom: 0;
+}
+
+ion-searchbar {
+  padding: 16px;
+  --background: #fff;
+  color: #000;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  min-height: 50vh;
+  
+  ion-spinner {
+    margin-bottom: 1rem;
+  }
+
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1rem;
+  }
+}
+
+ion-list {
+  background: transparent;
+  padding: 0 8px 8px 8px;
+}
+
+ion-card {
+  margin: 8px 0;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+ion-card-header {
+  padding: 16px;
+}
+
+ion-card-content {
+  padding: 0 16px 16px 16px;
+}
+
+.user-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+
+  > div {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.user-photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ion-color-light);
+  flex-shrink: 0;
+}
+
+ion-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-email {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ion-color-medium);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+ion-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 8px;
+
+  ion-label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+
+  ion-select {
+    width: 100%;
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
+}
+
+.ministry-info {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ion-color-light);
+}
+
+ion-chip {
+  font-size: 0.85rem;
+  height: 32px;
+  padding: 0 12px;
+
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  
+  ion-icon {
+    font-size: 64px;
+    color: var(--ion-color-medium);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+}
+
+// Responsividade
+@media (min-width: 768px) {
+  ion-list {
+    padding: 0 16px 16px 16px;
+  }
+
+  ion-card {
+    margin: 12px 0;
+  }
+
+  .user-photo {
+    width: 64px;
+    height: 64px;
+  }
+
+  ion-card-title {
+    font-size: 1.2rem;
+  }
+}

@@ -24,6 +24,8 @@ import {
 import { NavigationService } from 'src/app/services/navigate.service';
 import { MinistryService } from 'src/app/services/ministries.service';
 import { EscalaService } from 'src/app/services/escala.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserManagementService } from 'src/app/services/user-management.service';
 
 interface Escala {
   id?: string;
@@ -53,7 +55,6 @@ interface Escala {
     IonDatetime,
     IonSelect,
     IonSelectOption,
-    IonInput,
     IonSegment,
     IonSegmentButton,
     IonAccordionGroup,
@@ -67,29 +68,68 @@ export class EscalaAdminPage implements OnInit {
 
   ministerios: any[] = [];
   escalas: Escala[] = [];
+  users: any[] = [];
+  availableUsers: any[] = [];
   editandoId: string | null = null;
+  
+  userRole: string | null = null;
+  userMinistryId: string | null = null;
+  userMinistryName: string | null = null;
+  isMinistry: boolean = false;
 
   constructor(
     private navigationService: NavigationService,
     private ministryService: MinistryService,
     private escalaService: EscalaService,
+    private authService: AuthService,
+    private userManagementService: UserManagementService,
     private fb: FormBuilder
   ) {
     this.escalaForm = this.fb.group({
       data: ['', Validators.required],
       ministerio: ['', Validators.required],
-      pessoas: ['']
+      pessoas: [[]]
     });
   }
 
   ngOnInit() {
-    this.carregarDados();
+    this.authService.user$.subscribe(async user => {
+      if (user) {
+        this.userRole = user.role || null;
+        this.userMinistryId = user.ministryId || null;
+        this.userMinistryName = user.ministryName || null;
+        this.isMinistry = this.userRole === 'ministry';
+        
+        await this.carregarDados();
+      }
+    });
+
+    // quando o ministério selecionado mudar (para admins), atualiza lista de usuários disponíveis
+    this.escalaForm.get('ministerio')?.valueChanges.subscribe(value => {
+      // value é o nome do ministério; encontrar id correspondente
+      const found = this.ministerios.find(m => m.nome === value || m.name === value);
+      const id = found ? (found.id || found.uid) : null;
+      this.updateAvailableUsers(id);
+    });
   }
 
   carregarDados() {
     this.ministryService.listarMinisterios().subscribe({
       next: (dados) => {
-        this.ministerios = dados;
+        // Se for ministry, mostra apenas seu ministério
+        if (this.isMinistry && this.userMinistryId) {
+          this.ministerios = dados.filter(m => m.id === this.userMinistryId);
+          
+          // Pre-seleciona o ministério automaticamente
+          if (this.ministerios.length > 0 && !this.editandoId) {
+            this.escalaForm.patchValue({
+              ministerio: this.ministerios[0].nome
+            });
+          }
+        } else {
+          // Admin e Master veem todos os ministérios
+          this.ministerios = dados;
+        }
       },
       error: (err) => {
         console.error('Erro ao carregar ministérios:', err);
@@ -99,7 +139,14 @@ export class EscalaAdminPage implements OnInit {
     this.escalaService.listarEscalas().subscribe({
       next: (dados) => {
         if (dados && dados.length > 0) {
-          this.escalas = dados.map(e => ({
+          let escalasFiltradas = dados;
+          
+          // Se for ministry, filtra apenas escalas do seu ministério
+          if (this.isMinistry && this.userMinistryName) {
+            escalasFiltradas = dados.filter(e => e.ministerio === this.userMinistryName);
+          }
+          
+          this.escalas = escalasFiltradas.map(e => ({
             id: e.id,
             data: e.data,
             ministerio: e.ministerio,
@@ -107,6 +154,31 @@ export class EscalaAdminPage implements OnInit {
           }));
         }
       }
+    });
+
+    // carregar todos os usuários e atualizar lista disponível
+    this.userManagementService.listarUsuarios().subscribe({
+      next: (dados) => {
+        this.users = dados || [];
+        // atualiza availableUsers com base no ministério do usuário atual
+        const ministryIdToUse = this.userMinistryId || null;
+        this.updateAvailableUsers(ministryIdToUse);
+      },
+      error: (err) => console.error('Erro ao carregar usuários:', err)
+    });
+  }
+
+  updateAvailableUsers(ministryId: string | null) {
+    if (!ministryId) {
+      this.availableUsers = [];
+      return;
+    }
+
+    this.availableUsers = (this.users || []).filter(u => {
+      // usuário pode ter campo 'ministries' (array) ou 'ministryId'
+      if (u.ministryId && u.ministryId === ministryId) return true;
+      const arr = u.ministries || [];
+      return arr.some((m: any) => (m.id === ministryId) || (m.uid === ministryId) || (m.nome === this.userMinistryName) || (m.name === this.userMinistryName));
     });
   }
 
@@ -118,12 +190,14 @@ export class EscalaAdminPage implements OnInit {
     if (this.escalaForm.invalid) return;
 
     const formValue = this.escalaForm.value;
+    const pessoasArray = Array.isArray(formValue.pessoas)
+      ? formValue.pessoas.map((p: any) => (typeof p === 'string' ? p.trim() : p))
+      : (formValue.pessoas ? formValue.pessoas.split(',').map((p: string) => p.trim()) : []);
+
     const dadosEscala = {
       data: formValue.data,
       ministerio: formValue.ministerio,
-      pessoasArray: formValue.pessoas
-        ? formValue.pessoas.split(',').map((p: string) => p.trim())
-        : []
+      pessoasArray
     };
 
     try {
@@ -145,7 +219,7 @@ export class EscalaAdminPage implements OnInit {
     this.escalaForm.setValue({
       data: escala.data,
       ministerio: escala.ministerio,
-      pessoas: escala.pessoasArray.join(', ')
+      pessoas: escala.pessoasArray || []
     });
     this.editandoId = escala.id || null;
     this.tabSelecionada = 'criar';

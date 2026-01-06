@@ -25,16 +25,14 @@ import { Subscription } from 'rxjs';
   imports: [
     CommonModule,
     IonContent,
-    IonList,
     IonItem,
-    IonLabel,
     IonIcon,
     IonHeader,
     IonToolbar,
     IonTitle,
     IonButton,
     IonAccordion,
-    IonAccordionGroup,
+    IonAccordionGroup
   ],
 })
 

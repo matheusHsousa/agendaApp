@@ -29,17 +29,17 @@ export class MeditacoesPage implements OnInit {
     {
       img: '/assets/images/meditacaoDiaria.png',
       label: 'Diaria',
-      link: 'https://mais.cpb.com.br/meditacao/sinais-desatualizados/'
+      link: 'https://mais.cpb.com.br/?post_type=meditacao&p=66105'
     },
     {
       img: '/assets/images/meditacaoJovem.png',
       label: 'Jovem',
-      link: 'https://mais.cpb.com.br/meditacao/pescadores-de-homens/'
+      link: 'https://mais.cpb.com.br/?post_type=meditacao&p=66173'
     },
     {
       img: '/assets/images/meditacaoMulher.png',
       label: 'Mulher',
-      link: 'https://mais.cpb.com.br/meditacao/autopromocao-em-pequena-escala/'
+      link: 'https://mais.cpb.com.br/?post_type=meditacao&p=66140'
     }
   ];
 

@@ -10,11 +10,14 @@ import {
   deleteDoc,
   collectionData,
   query,
-  orderBy
+  orderBy,
+  where,
+  getDoc
 } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { LoadingService } from './loading.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +25,7 @@ import { LoadingService } from './loading.service';
 export class EscalaService {
   private firestore = inject(Firestore);
   private auth = inject(Auth);
+  private authService = inject(AuthService);
   private ngZone = inject(NgZone);
   private loadingService = inject(LoadingService);
 
@@ -37,9 +41,14 @@ export class EscalaService {
       const user = this.auth.currentUser;
       if (!user) throw new Error('Usuário não autenticado');
 
+      const userData = await this.authService.getCurrentUserData();
+      
       const escalaData = {
         ...escala,
         uid: user.uid,
+        createdBy: user.uid,
+        createdByRole: userData?.role || 'user',
+        ministryId: userData?.role === 'ministry' ? userData.ministryId : escala.ministryId,
         createdAt: new Date().toISOString(),
       };
 
@@ -76,6 +85,69 @@ export class EscalaService {
             subscriber.complete();
           }
         });
+      });
+    });
+  }
+
+  // Lista escalas filtradas por ministério (para usuários com role ministry)
+  async listarEscalasPorMinisterio(ministryId: string): Promise<any[]> {
+    this.loadingService.show();
+    try {
+      const escalasRef = collection(this.firestore, 'escalas');
+      const q = query(
+        escalasRef, 
+        where('ministryId', '==', ministryId),
+        orderBy('data', 'asc')
+      );
+
+      return new Promise((resolve, reject) => {
+        this.ngZone.run(() => {
+          collectionData(q, { idField: 'id' }).subscribe({
+            next: (data) => {
+              this.loadingService.hide();
+              resolve(data);
+            },
+            error: (err) => {
+              this.loadingService.hide();
+              reject(err);
+            }
+          });
+        });
+      });
+    } catch (err) {
+      this.loadingService.hide();
+      throw err;
+    }
+  }
+
+  // Lista escalas baseado no role do usuário
+  async listarEscalasPorRole(): Promise<any[]> {
+    const userData = await this.authService.getCurrentUserData();
+    
+    if (!userData) {
+      throw new Error('Usuário não autenticado');
+    }
+
+    // Master e Admin veem todas as escalas
+    if (userData.role === 'master' || userData.role === 'admin') {
+      return new Promise((resolve, reject) => {
+        this.listarEscalas().subscribe({
+          next: (escalas) => resolve(escalas),
+          error: (err) => reject(err)
+        });
+      });
+    }
+
+    // Ministry vê apenas as escalas do seu ministério
+    if (userData.role === 'ministry' && userData.ministryId) {
+      return this.listarEscalasPorMinisterio(userData.ministryId);
+    }
+
+    // Usuário comum vê todas (ou você pode restringir)
+    return new Promise((resolve, reject) => {
+      this.listarEscalas().subscribe({
+        next: (escalas) => resolve(escalas),
+        error: (err) => reject(err)
       });
     });
   }

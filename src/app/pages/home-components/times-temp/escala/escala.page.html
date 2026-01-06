@@ -10,22 +10,48 @@
 </ion-header>
 
 <ion-content color="light">
+  <div class="escala-wrap">
   <ion-accordion-group>
-  <ion-accordion *ngFor="let ministerio of ministerios" [value]="ministerio.titulo">
-    <ion-item slot="header" color="light">
-      <ion-label>Ministério: {{ ministerio.titulo }}</ion-label>
-    </ion-item>
+    <ion-accordion *ngFor="let ministerio of ministerios" [value]="ministerio.titulo">
+      <ion-item slot="header" lines="none" class="escala-header-item" button>
+        <div class="escala-header">
+          <div class="escala-badge">
+            {{ ministerio.titulo | slice:0:1 }}
+          </div>
 
-    <div class="ion-padding" slot="content">
-      <p><strong>Data da Escala:</strong> {{ ministerio.dataEscala }}</p>
+          <div class="escala-info">
+            <div class="escala-title">
+              {{ ministerio.titulo }}
+            </div>
+  
+          </div>
 
-      <ion-list>
-        <ion-item *ngFor="let nome of ministerio.nomes">
-          <ion-label>{{ nome }}</ion-label>
-        </ion-item>
-      </ion-list>
-    </div>
-  </ion-accordion>
+          <ion-icon name="chevron-down-outline" class="chevron">
+          </ion-icon>
+        </div>
+      </ion-item>
+
+      <div class="escala-body" slot="content">
+        <div class="pessoas-grid">
+          <ng-container *ngFor="let nome of ministerio.nomes; let i = index">
+            <div class="pessoa-chip" *ngIf="i < 3">
+              <div class="initial">{{ nome | slice:0:1 }}</div>
+              <div class="pessoa-name">{{ nome }}</div>
+            </div>
+          </ng-container>
+
+          <div *ngIf="ministerio.nomes?.length > 3" class="pessoa-chip more-chip">
+            +{{ ministerio.nomes.length - 3 }} pessoas
+          </div>
+
+          <div *ngIf="!(ministerio.nomes?.length)" class="empty-state">
+            Nenhuma pessoa atribuída
+          </div>
+        </div>
+      </div>
+    </ion-accordion>
   </ion-accordion-group>
+
+  </div>
 
 </ion-content>

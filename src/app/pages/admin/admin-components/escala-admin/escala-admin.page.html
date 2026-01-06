@@ -19,7 +19,7 @@
     </ion-segment-button>
   </ion-segment>
 
-  <div *ngIf="tabSelecionada === 'criar'" class="content">
+  <div *ngIf="tabSelecionada === 'criar'" class="content form-section">
     <form [formGroup]="escalaForm" (ngSubmit)="adicionarOuEditarEscala()">
       <ion-datetime 
         formControlName="data" 
@@ -33,7 +33,8 @@
         formControlName="ministerio" 
         label="Ministerio" 
         label-placement="floating" 
-        fill="outline">
+        fill="outline"
+        [disabled]="isMinistry">
         <ion-select-option *ngFor="let min of ministerios" [value]="min.nome">
           {{ min.nome }}
         </ion-select-option>
@@ -42,35 +43,40 @@
         Ministério é obrigatório
       </ion-text>
 
-      <ion-input 
+      <ion-select
         formControlName="pessoas"
-        label="Pessoas (separadas por vírgula)" 
-        label-placement="floating" 
-        placeholder="Ex: João, Maria, Ana" 
-        fill="outline">
-      </ion-input>
+        label="Pessoas"
+        label-placement="floating"
+        multiple="true"
+        interface="popover"
+        placeholder="Selecione as pessoas"
+        [disabled]="!availableUsers.length">
+        <ion-select-option *ngFor="let u of availableUsers" [value]="u.displayName || u.email">
+          {{ u.displayName || u.email }}
+        </ion-select-option>
+      </ion-select>
       
       <ion-button 
         type="submit" 
-        style="width: 100%;" 
+        class="form-submit" 
         [disabled]="escalaForm.invalid">
         {{ editandoId ? 'Salvar' : 'Adicionar' }}
       </ion-button>
     </form>
   </div>
 
-  <div *ngIf="tabSelecionada === 'visualizar'" style="margin-top: 20px;">
+  <div *ngIf="tabSelecionada === 'visualizar'" class="visualizar content">
     <ion-accordion-group [multiple]="true">
       <ion-accordion *ngFor="let grupo of escalasAgrupadas; trackBy: trackByData" [value]="grupo.data">
         <ion-item slot="header" color="light">
           <ion-label>{{ grupo.data | date:'dd/MM/yyyy' }}</ion-label>
         </ion-item>
-        <div class="" slot="content">
+        <div class="accordion-content" slot="content">
           <ion-list>
             <ion-item *ngFor="let escala of grupo.escalas; trackBy: trackById">
-              <ion-label>
+              <ion-label style="color: #fff;">
                 <h2>{{ escala.ministerio }}</h2>
-                <p>{{ escala.pessoasArray.join(', ') }}</p>
+                <p  style="color: #fff">{{ escala.pessoasArray.join(', ') }}</p>
               </ion-label>
               <ion-button fill="clear" color="primary" (click)="editarEscala(escala)">
                 <ion-icon name="create"></ion-icon>

@@ -22,14 +22,24 @@
       <ion-label>Escalas</ion-label>
     </ion-item>
     
-    <ion-item button (click)="navegar('/tabs/schedule')">
+    <ion-item button (click)="navegar('/tabs/schedule')" *ngIf="isAdmin">
       <ion-icon slot="start" name="calendar"></ion-icon>
       <ion-label>Agendamentos</ion-label>
     </ion-item>
 
-    <ion-item button (click)="navegar('/tabs/ministries')">
+    <ion-item button (click)="navegar('/tabs/ministries')" *ngIf="isAdmin">
       <ion-icon slot="start" name="people"></ion-icon>
       <ion-label>Ministérios</ion-label>
+    </ion-item>
+    
+    <ion-item button (click)="navegar('/tabs/ministry-members')" *ngIf="isMinistry">
+      <ion-icon slot="start" name="people"></ion-icon>
+      <ion-label>Membros do Ministério</ion-label>
+    </ion-item>
+
+    <ion-item button (click)="navegar('/tabs/user-management')" *ngIf="isMaster">
+      <ion-icon slot="start" name="key"></ion-icon>
+      <ion-label>Gerenciar Cargos</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

@@ -1,0 +1,42 @@
+<ion-header class="header">
+  <ion-toolbar>
+    <div class="toolbar-content">
+      <ion-button fill="clear" (click)="voltar()">
+        <ion-icon name="chevron-back-outline" class="icon-arrow"></ion-icon>
+      </ion-button>
+      <ion-title>Membros</ion-title>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="controls">
+    <ion-label>Ministério gerenciado</ion-label>
+    <p class="ministry-name" *ngIf="managingMinistryName; else noMinistry">{{ managingMinistryName }}</p>
+    <ng-template #noMinistry>
+      <p>Você não está vinculado a nenhum ministério. Somente administradores podem alterar associações manualmente.</p>
+    </ng-template>
+  </div>
+
+  <ion-searchbar
+    [(ngModel)]="searchText"
+    (ionInput)="buscarUsuarios($event)"
+    placeholder="Buscar por email ou nome"
+    animated="true"
+  ></ion-searchbar>
+
+  <div class="list-header">
+    <strong>Usuários ({{ filteredSortedUsers.length || 0 }})</strong>
+    <small *ngIf="searchText">Buscando por "{{ searchText }}"</small>
+  </div>
+  <ion-list>
+    <ion-item *ngFor="let user of filteredSortedUsers">
+      <ion-label>
+        <h2>{{ user.displayName || user.email }}</h2>
+        <p>{{ user.email }}</p>
+        <small *ngIf="user.ministries && user.ministries.length">Ministérios: {{ getMinistriesNames(user) }}</small>
+      </ion-label>
+      <ion-toggle slot="end" [checked]="isMemberOf(user, managingMinistryId)" (ionChange)="toggleMembership(user, $event)" [disabled]="!managingMinistryId"></ion-toggle>
+    </ion-item>
+  </ion-list>
+</ion-content>

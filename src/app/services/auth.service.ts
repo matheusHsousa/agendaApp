@@ -22,6 +22,7 @@ import { Capacitor } from '@capacitor/core';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { GoogleAuth } from '@codetrix-studio/capacitor-google-auth';
 import { FirebaseError } from '@angular/fire/app';
+import { UserRole, UserData } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -45,8 +46,8 @@ export class AuthService {
 
     onAuthStateChanged(this.auth, async (user) => {
       if (user) {
-        const role = await this.loadUserRole(user.uid);
-        const userWithRole = { ...user, role };
+        const userData = await this.loadUserData(user.uid);
+        const userWithRole = { ...user, ...userData };
         this.currentUserSubject.next(userWithRole);
         this.setCachedUser(userWithRole);
       } else {
@@ -139,7 +140,7 @@ export class AuthService {
     if (!snap.exists()) {
       await setDoc(userRef, {
         ...userData,
-        role: 'user',
+        role: 'user' as UserRole,
         createdAt: new Date().toISOString()
       });
     } else {
@@ -160,27 +161,45 @@ export class AuthService {
     return this.auth.currentUser != null;
   }
 
-  private async loadUserRole(uid: string): Promise<string> {
+  private async loadUserData(uid: string): Promise<Partial<UserData>> {
     try {
       const userDoc = doc(this.firestore, `users/${uid}`);
       const snap = await getDoc(userDoc);
       if (snap.exists()) {
         const data = snap.data();
-        return data['role'] || 'user';
+        return {
+          role: data['role'] || 'user',
+          ministryId: data['ministryId'],
+          ministryName: data['ministryName']
+        };
       } else {
-        return 'user';
+        return { role: 'user' };
       }
     } catch (error) {
-      console.error('Erro ao carregar role:', error);
-      return 'user';
+      console.error('Erro ao carregar dados do usuário:', error);
+      return { role: 'user' };
     }
+  }
+
+  async getUserRole(): Promise<UserRole> {
+    const user = this.currentUserSubject.value;
+    if (user && user.role) {
+      return user.role;
+    }
+    return 'user';
+  }
+
+  async getCurrentUserData(): Promise<any> {
+    return this.currentUserSubject.value;
   }
 
   private setCachedUser(user: any) {
     const userData = {
       uid: user.uid,
       email: user.email,
-      role: user.role
+      role: user.role,
+      ministryId: user.ministryId,
+      ministryName: user.ministryName
     };
     localStorage.setItem('cachedUser', JSON.stringify(userData));
   }
