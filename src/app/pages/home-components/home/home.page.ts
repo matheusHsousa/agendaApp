@@ -210,31 +210,93 @@ export class HomePage implements AfterViewInit {
   }
 
   async openPix() {
-    const pixCode =
-      '00020126430014br.gov.bcb.pix0114+5581999999995204000053039865802BR5920NOME DO RECEBEDOR6009SAO PAULO62290525mensagem de exemplo6304ABCD';
+    // Scanner para PWA (web) usando @zxing/browser.
+    // Requisitos: instalar `@zxing/browser` (ver instruções abaixo).
+    try {
+      // criar overlay simples com vídeo e botão fechar
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.inset = '0';
+      overlay.style.zIndex = '99999';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.background = 'rgba(0,0,0,0.6)';
 
-    const isPwa =
-      window.matchMedia('(display-mode: standalone)').matches || // Android/Chrome
-      (window.navigator as any).standalone === true; // iOS Safari
+      const container = document.createElement('div');
+      container.style.width = '100%';
+      container.style.maxWidth = '520px';
+      container.style.borderRadius = '12px';
+      container.style.overflow = 'hidden';
+      container.style.background = 'rgba(0,0,0,0.75)';
+      container.style.padding = '8px';
 
-    if (isPwa) {
-      // Está rodando como PWA → abrir seletor de banco com link Pix
+      const video = document.createElement('video');
+      video.style.width = '100%';
+      video.style.height = 'auto';
+      video.setAttribute('autoplay', 'true');
+      video.setAttribute('playsinline', 'true');
+
+      const closeBtn = document.createElement('button');
+      closeBtn.textContent = 'Fechar';
+      closeBtn.style.marginTop = '8px';
+      closeBtn.style.width = '100%';
+      closeBtn.style.padding = '10px';
+      closeBtn.style.border = 'none';
+      closeBtn.style.borderRadius = '8px';
+      closeBtn.style.background = 'var(--ion-color-primary)';
+      closeBtn.style.color = '#fff';
+
+      container.appendChild(video);
+      container.appendChild(closeBtn);
+      overlay.appendChild(container);
+      document.body.appendChild(overlay);
+
+      let codeReader: any;
       try {
-        const pixUrl = `br.gov.bcb.pix://${pixCode}`;
-        window.location.href = pixUrl; // força abertura do app de pagamento
+        const zx = await import('@zxing/browser');
+        const BrowserMultiFormatReader = zx.BrowserMultiFormatReader;
+        codeReader = new BrowserMultiFormatReader();
+
+        // decodeOnceFromVideoDevice retorna o primeiro resultado
+        const result = await codeReader.decodeOnceFromVideoDevice(undefined, video as HTMLVideoElement);
+        const text = result.getText ? result.getText() : result.text || result;
+
+        // cleanup
+        codeReader.reset();
+        document.body.removeChild(overlay);
+
+        // ação padrão: copiar e oferecer compartilhar
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch (err) {
+          console.warn('Não foi possível copiar automaticamente:', err);
+        }
+
+        if (navigator.share) {
+          try {
+            await navigator.share({ title: 'PIX', text });
+            return;
+          } catch (err) {
+            // usuário pode cancelar o share — não é erro
+          }
+        }
+
+        alert('Código PIX lido e copiado para área de transferência. Cole no app do seu banco.');
       } catch (err) {
-        console.error('Erro ao abrir Pix no PWA:', err);
-        await navigator.clipboard.writeText(pixCode);
-        alert('Não foi possível abrir o Pix, código copiado para a área de transferência.');
+        console.error('Erro no scanner PIX:', err);
+        if (codeReader && codeReader.reset) codeReader.reset();
+        if (document.body.contains(overlay)) document.body.removeChild(overlay);
+        alert('Erro ao acessar a câmera ou decodificar o QR. Verifique permissões.');
       }
-    } else {
-      try {
-        await OpenPix.open({ code: pixCode });
-      } catch (err) {
-        console.error('Erro ao abrir Pix:', err);
-        await navigator.clipboard.writeText(pixCode);
-        alert('Não foi possível abrir o Pix, código copiado para a área de transferência.');
-      }
+
+      closeBtn.addEventListener('click', () => {
+        try { if (codeReader && codeReader.reset) codeReader.reset(); } catch (e) {}
+        if (document.body.contains(overlay)) document.body.removeChild(overlay);
+      });
+    } catch (err) {
+      console.error('openPix fallback error:', err);
+      alert('Não foi possível abrir o scanner.');
     }
   }
 

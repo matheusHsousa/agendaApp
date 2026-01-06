@@ -34,6 +34,7 @@
     "@capgo/capacitor-social-login": "^7.8.3",
     "@codetrix-studio/capacitor-google-auth": "^3.4.0-rc.4",
     "@ionic/angular": "^8.0.0",
+    "@zxing/browser": "^0.1.5",
     "cordova-plugin-googleplus": "^8.5.2",
     "cordova-plugin-inappbrowser": "^6.0.0",
     "cordova-plugin-intent": "^0.1.2",
