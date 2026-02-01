@@ -180,6 +180,11 @@ export class HomePage implements AfterViewInit {
     return moment(dataHora).format('HH:mm');
   }
 
+  truncate(text: string | null | undefined, length = 20) {
+    if (!text) return '';
+    return text.length > length ? text.slice(0, length) + '...' : text;
+  }
+
   onScroll(event: any) {
     const scrollTop = event.detail.scrollTop;
     const windowHeight = window.innerHeight;

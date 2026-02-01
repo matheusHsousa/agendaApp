@@ -88,12 +88,27 @@
   padding: 12px;
   border-radius: 12px;
   box-shadow: 1px 1px 1px 1px rgba(var(--ion-color-dark-rgb), 0.1);
-  min-width: 220px;
+  width: 220px;
   flex: 0 0 auto;
   margin-left: 10px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.evento-nome {
+  display: inline-block;
+  width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pregador {
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .data-hora-evento {

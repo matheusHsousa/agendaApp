@@ -19,8 +19,10 @@
 
       <div class="carrossel-wrapper">
         <div class="evento-card" *ngFor="let evento of proximosEventos">
-          <label><strong>Evento: {{ evento.nomeEvento }}</strong></label>
-          <label>Pregador: {{ evento.nomePregador }}</label>
+          <label>
+            <strong class="evento-nome" [title]="evento.nomeEvento">Evento: {{ truncate(evento.nomeEvento, 20) }}</strong>
+          </label>
+          <label class="pregador" [title]="evento.nomePregador">Pregador: {{ truncate(evento.nomePregador, 20) }}</label>
           <label class="data-hora-evento">
             <ion-icon slot="start" name="calendar" class="ion-icon-card" ></ion-icon>
             {{ formatarDia(evento.dataHora) }} | {{ formatarHora(evento.dataHora) }}
